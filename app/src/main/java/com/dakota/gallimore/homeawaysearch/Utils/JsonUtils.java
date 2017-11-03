@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
+import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
@@ -12,7 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by galli_000 on 11/2/2017.
@@ -160,4 +164,27 @@ public class JsonUtils {
         return new Feature(count, category, description, localizedName);
     }
 
+    public static RatePeriod parseRatePeriodJson(JSONObject jsonObject) throws JSONException {
+        Date arrivalDate = new Date();
+        Date leaveDate = new Date();
+        int minimumStay = 1;
+        double weeklyRate = 0;
+        String currency = "";
+
+        try {
+            JSONObject dateRange = jsonObject.getJSONObject("dateRange");
+            JSONObject weeklyObject = jsonObject.getJSONObject("rates").getJSONObject("weekly");
+            arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString("beginDate"));
+            leaveDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString("endDate"));
+            minimumStay = jsonObject.getInt("minimumStay");
+            weeklyRate = weeklyObject.getDouble("amount");
+            currency = weeklyObject.getString("currency");
+        } catch (JSONException e) {
+            Log.d("Network Utils: ", e.getMessage());
+            throw new JSONException("Invalid Json data for RatePeriod type");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new RatePeriod(arrivalDate, leaveDate, minimumStay, weeklyRate, currency);
+    }
 }
