@@ -3,6 +3,7 @@ package com.dakota.gallimore.homeawaysearch.Utils;
 import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
@@ -138,6 +139,25 @@ public class JsonUtils {
         }
 
         return new Review(reviewDate, reviewerName, body, headline, helpfulCount, unhelpfulCount, reviewLocale);
+    }
+
+    public static Feature parseFeatureJson(JSONObject jsonObject) throws JSONException {
+        int count;
+        String category;
+        String description;
+        String localizedName;
+
+        try {
+            count = jsonObject.getInt("count");
+            category = jsonObject.getString("category");
+            description = jsonObject.getString("description");
+            localizedName = jsonObject.getString("localizedName");
+        } catch (JSONException e) {
+            Log.d("Network Utils: ", e.getMessage());
+            throw new JSONException("Invalid Json data for Feature type");
+        }
+
+        return new Feature(count, category, description, localizedName);
     }
 
 }
