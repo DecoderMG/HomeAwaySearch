@@ -14,7 +14,7 @@ public class RatePeriod {
 
     private int minimumStay;
 
-    private float weeklyRate;
+    private double weeklyRate;
     private String currency;
 
     public RatePeriod() {
@@ -22,7 +22,7 @@ public class RatePeriod {
     }
 
     public RatePeriod(Date arrivalDate, Date leaveDate,
-                      int minimumStay, int weeklyRate,
+                      int minimumStay, double weeklyRate,
                       String currency) {
         this.arrivalDate = arrivalDate;
         this.leaveDate = leaveDate;
@@ -55,11 +55,11 @@ public class RatePeriod {
         this.minimumStay = minimumStay;
     }
 
-    public float getWeeklyRate() {
+    public double getWeeklyRate() {
         return weeklyRate;
     }
 
-    public void setWeeklyRate(int weeklyRate) {
+    public void setWeeklyRate(double weeklyRate) {
         this.weeklyRate = weeklyRate;
     }
 
