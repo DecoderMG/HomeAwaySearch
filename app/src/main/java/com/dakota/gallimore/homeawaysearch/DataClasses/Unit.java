@@ -17,7 +17,7 @@ public class Unit {
     private ArrayList<Feature> features;
     private ArrayList<Review> reviews;
     private ArrayList<Room> rooms;
-    private RatePeriod ratePeriod;
+    private ArrayList<RatePeriod> ratePeriods;
 
     private int maxSleep;
     private int maxSleepInBeds;
@@ -36,7 +36,7 @@ public class Unit {
 
     public Unit(int unitNumber, int unitArea, String areaUnit,
                 ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
-                RatePeriod ratePeriod, int maxSleep, int maxSleepInBeds,
+                ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 int numOfBathrooms, int numOfBedrooms, String propertyType,
                 int numOfRatings, int[] numOfReviewRatings) {
         this.unitNumber = unitNumber;
@@ -45,7 +45,7 @@ public class Unit {
         this.features = features;
         this.reviews = reviews;
         this.rooms = rooms;
-        this.ratePeriod = ratePeriod;
+        this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
         this.numOfBathrooms = numOfBathrooms;
@@ -55,9 +55,9 @@ public class Unit {
         this.numOfReviewRatings = numOfReviewRatings;
     }
 
-    public Unit(int unitNumber, int unitArea, String areaunit,
+    public Unit(int unitNumber, int unitArea, String areaUnit,
                 ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
-                RatePeriod ratePeriod, int maxSleep, int maxSleepInBeds,
+                ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 String propertyType) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
@@ -65,7 +65,7 @@ public class Unit {
         this.features = features;
         this.reviews = reviews;
         this.rooms = rooms;
-        this.ratePeriod = ratePeriod;
+        this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
         this.propertyType = propertyType;
@@ -211,12 +211,34 @@ public class Unit {
         return null;
     }
 
-    public RatePeriod getRatePeriod() {
-        return ratePeriod;
+    public ArrayList<RatePeriod> getRatePeriods() {
+        return ratePeriods;
     }
 
-    public void setRatePeriod(RatePeriod ratePeriod) {
-        this.ratePeriod = ratePeriod;
+    public void setRatePeriods(ArrayList<RatePeriod> ratePeriods) {
+        this.ratePeriods = ratePeriods;
+    }
+
+    public void addRatePeriod(RatePeriod ratePeriod) {
+        if (ratePeriod == null) {
+            return;
+        }
+        this.ratePeriods.add(ratePeriod);
+    }
+
+    public void removeRatePeriod(RatePeriod ratePeriod) {
+        if (ratePeriod == null || !this.ratePeriods.contains(ratePeriod)) {
+            return;
+        }
+        this.ratePeriods.remove(ratePeriod);
+    }
+
+    public RatePeriod getRatePeriod(int i) {
+        if (i < this.ratePeriods.size()) {
+            return this.ratePeriods.get(i);
+        }
+        Log.d("Unit: ", "Error: attempting to remove rate period outside of array index");
+        return null;
     }
 
     public int getMaxSleep() {
