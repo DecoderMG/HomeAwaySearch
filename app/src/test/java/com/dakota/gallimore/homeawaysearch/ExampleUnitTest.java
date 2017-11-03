@@ -1,6 +1,7 @@
 package com.dakota.gallimore.homeawaysearch;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
@@ -34,7 +35,7 @@ public class ExampleUnitTest {
 
     @Test
     public void JsonRoomTest() throws Exception {
-        String RoomJson = "{\"amenities\": [{" +
+        String roomJson = "{\"amenities\": [{" +
                 "                \"count\": 1," +
                 "                \"category\": \"AMENITY\"," +
                 "                \"description\": \"Toilet\"," +
@@ -44,7 +45,7 @@ public class ExampleUnitTest {
                 "            \"name\": \"Toilet 1\"," +
                 "            \"roomSubType\": \"NO_TUB_OR_SHOWER\"" +
                 "          }";
-        JSONObject jsonObject = new JSONObject(RoomJson);
+        JSONObject jsonObject = new JSONObject(roomJson);
         Room room = JsonUtils.parseRoomJson(jsonObject, "bathroom");
         Amenities amenity = new Amenities(1, "AMENITY", "Toilet", "toilet");
         assertEquals("Toilet 1", room.getName());
@@ -58,7 +59,7 @@ public class ExampleUnitTest {
 
     @Test
     public void JsonReviewTest() throws Exception {
-        String ReviewJson = "{" +
+        String reviewJson = "{" +
                 "            \"arrivalDate\": \"2015-09-24T00:00:00.000Z\"," +
                 "            \"reviewerName\": \"John\"," +
                 "            \"body\": \"appartement agréable.\"," +
@@ -68,7 +69,7 @@ public class ExampleUnitTest {
                 "            \"reviewLocale\": \"fr_FR\"" +
                 "          }";
 
-        JSONObject jsonObject = new JSONObject(ReviewJson);
+        JSONObject jsonObject = new JSONObject(reviewJson);
         Review review = JsonUtils.parseReviewJson(jsonObject);
         assertEquals("2015-09-24T00:00:00.000Z", review.getArrivalDate());
         assertEquals("John", review.getReviewerName());
@@ -77,5 +78,22 @@ public class ExampleUnitTest {
         assertEquals(0, review.getHelpfulCount());
         assertEquals(0, review.getUnhelpfulCount());
         assertEquals("fr_FR", review.getReviewLocale());
+    }
+
+    @Test
+    public void JsonFeatureTest() throws Exception {
+        String featureJson = "{" +
+                "            \"count\": 1," +
+                "            \"category\": \"GENERAL\"," +
+                "            \"description\": \"air-conditioning\"," +
+                "            \"localizedName\": \"Air Conditioning\"" +
+                "          }";
+
+        JSONObject jsonObject = new JSONObject(featureJson);
+        Feature feature = JsonUtils.parseFeatureJson(jsonObject);
+        assertEquals(1, feature.getCount());
+        assertEquals("GENERAL", feature.getCategory());
+        assertEquals("air-conditioning", feature.getDescription());
+        assertEquals("Air Conditioning", feature.getLocalizedName());
     }
 }
