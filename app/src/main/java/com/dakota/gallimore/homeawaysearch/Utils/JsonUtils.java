@@ -3,11 +3,14 @@ package com.dakota.gallimore.homeawaysearch.Utils;
 import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by galli_000 on 11/2/2017.
@@ -87,6 +90,28 @@ public class JsonUtils {
             throw new JSONException("Invalid Json data for Amenities type");
         }
         return new Amenities(count, category, description, localizedName);
+    }
+
+    public static Room parseRoomJson(JSONObject jsonObject, String roomType) throws JSONException {
+        ArrayList<Amenities> amenities = new ArrayList<>();
+        String roomName = "";
+        String roomSubType = "";
+
+        try {
+            JSONArray amenitiesJson = jsonObject.getJSONArray("amenities");
+            for (int i = 0; i < amenitiesJson.length(); i++) {
+                Amenities amenity = parseAmenityJson(amenitiesJson.getJSONObject(i));
+                amenities.add(amenity);
+            }
+            roomName = jsonObject.getString("name");
+            roomSubType = jsonObject.getString("roomSubType");
+        } catch (JSONException e) {
+            Log.d("Network utils: ", e.getMessage());
+            throw new JSONException("Invalid Json data for Room type");
+        }
+
+        return new Room(amenities, roomName, roomSubType, roomType);
+
     }
 
 }
