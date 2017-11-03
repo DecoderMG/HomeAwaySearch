@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * Created by galli_000 on 11/3/2017.
+ * Class containing information to create stay rate
  */
 
 public class RatePeriod {
@@ -13,7 +14,7 @@ public class RatePeriod {
 
     private int minimumStay;
 
-    private int weeklyRate;
+    private float weeklyRate;
     private String currency;
 
     public RatePeriod() {
@@ -54,7 +55,7 @@ public class RatePeriod {
         this.minimumStay = minimumStay;
     }
 
-    public int getWeeklyRate() {
+    public float getWeeklyRate() {
         return weeklyRate;
     }
 
