@@ -3,6 +3,7 @@ package com.dakota.gallimore.homeawaysearch.Utils;
 import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 
@@ -111,7 +112,32 @@ public class JsonUtils {
         }
 
         return new Room(amenities, roomName, roomSubType, roomType);
+    }
 
+    public static Review parseReviewJson(JSONObject jsonObject) throws JSONException {
+        String reviewDate = "";
+        String reviewerName = "";
+        String body = "";
+        String headline = "";
+        int helpfulCount = 0;
+        int unhelpfulCount = 0;
+        double rating = 0.0;
+        String reviewLocale = "";
+
+        try {
+            reviewDate = jsonObject.getString("arrivalDate");
+            reviewerName = jsonObject.getString("reviewerName");
+            body = jsonObject.getString("body");
+            headline = jsonObject.getString("headline");
+            helpfulCount = jsonObject.getInt("helpfulCount");
+            unhelpfulCount = jsonObject.getInt("unhelpfulCount");
+            reviewLocale = jsonObject.getString("reviewLocale");
+        } catch (JSONException e) {
+            Log.d("Network Utils: ", e.getMessage());
+            throw new JSONException("Invalid Json data for Review type");
+        }
+
+        return new Review(reviewDate, reviewerName, body, headline, helpfulCount, unhelpfulCount, reviewLocale);
     }
 
 }
