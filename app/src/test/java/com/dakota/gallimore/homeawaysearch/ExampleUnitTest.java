@@ -1,6 +1,7 @@
 package com.dakota.gallimore.homeawaysearch;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
 import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
 
@@ -53,5 +54,28 @@ public class ExampleUnitTest {
         assertEquals(amenity.getCategory(), room.getAmenities().get(0).getCategory());
         assertEquals(amenity.getDescription(), room.getAmenities().get(0).getDescription());
         assertEquals(amenity.getLocalizedName(), room.getAmenities().get(0).getLocalizedName());
+    }
+
+    @Test
+    public void JsonReviewTest() throws Exception {
+        String ReviewJson = "{" +
+                "            \"arrivalDate\": \"2015-09-24T00:00:00.000Z\"," +
+                "            \"reviewerName\": \"John\"," +
+                "            \"body\": \"appartement agréable.\"," +
+                "            \"headline\": \"7/10\"," +
+                "            \"helpfulCount\": 0," +
+                "            \"unhelpfulCount\": 0," +
+                "            \"reviewLocale\": \"fr_FR\"" +
+                "          }";
+
+        JSONObject jsonObject = new JSONObject(ReviewJson);
+        Review review = JsonUtils.parseReviewJson(jsonObject);
+        assertEquals("2015-09-24T00:00:00.000Z", review.getArrivalDate());
+        assertEquals("John", review.getReviewerName());
+        assertEquals("appartement agréable.", review.getBody());
+        assertEquals("7/10", review.getHeadline());
+        assertEquals(0, review.getHelpfulCount());
+        assertEquals(0, review.getUnhelpfulCount());
+        assertEquals("fr_FR", review.getReviewLocale());
     }
 }
