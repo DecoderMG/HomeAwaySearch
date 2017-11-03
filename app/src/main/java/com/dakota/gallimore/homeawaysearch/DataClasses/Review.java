@@ -13,7 +13,7 @@ public class Review {
     private String headline;
     private int helpfulCount;
     private int unhelpfulCount;
-    private float rating;
+    private double rating;
     private String reviewLocale;
 
     public Review() {
@@ -80,11 +80,11 @@ public class Review {
         this.unhelpfulCount = unhelpfulCount;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

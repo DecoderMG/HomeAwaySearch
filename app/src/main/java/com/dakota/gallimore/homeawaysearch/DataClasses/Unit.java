@@ -25,7 +25,7 @@ public class Unit {
     private int numOfBedrooms;
     private String propertyType;
     private int numOfRatings;
-    private float averageReviewScore;
+    private double averageReviewScore;
     private int[] numOfReviewRatings;
 
     public Unit() {
@@ -161,7 +161,7 @@ public class Unit {
     }
 
     public void updateReviewScore() {
-        float average = 0;
+        double average = 0;
         for (int i = 0; i < this.reviews.size(); i++) {
             average = average + this.reviews.get(i).getRating();
         }
@@ -267,7 +267,7 @@ public class Unit {
         this.numOfRatings = numOfRatings;
     }
 
-    public float getAverageReviewScore() {
+    public double getAverageReviewScore() {
         return averageReviewScore;
     }
 
