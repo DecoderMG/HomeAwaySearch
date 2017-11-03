@@ -27,6 +27,7 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -172,7 +173,12 @@ public class SearchFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                User user = JsonUtils.parseUserJson(jsonReply);
+                                User user = null;
+                                try {
+                                    user = JsonUtils.parseUserJson(jsonReply);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 StringBuilder userBuffer = new StringBuilder();
                                 userBuffer.append("User Id: " + user.getId() + "\nName: " + user.getFirstName() + " " + user.getLastName() + "\nEmail: " + user.getEmail()
                                         + "\nAccounts: ");
