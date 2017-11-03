@@ -120,6 +120,11 @@ public class ExampleUnitTest {
         JSONObject jsonObject = new JSONObject(ratePeriodJson);
         RatePeriod ratePeriod = JsonUtils.parseRatePeriodJson(jsonObject);
         Date arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse("2014-01-25");
+        Date endDate = new SimpleDateFormat("YYYY-MM-DD").parse("2014-03-13");
         assertTrue(ratePeriod.getArrivalDate().compareTo(arrivalDate) == 0);
+        assertTrue(ratePeriod.getLeaveDate().compareTo(endDate) == 0);
+        assertEquals(7, ratePeriod.getMinimumStay());
+        assertEquals(750, ratePeriod.getWeeklyRate(), 0);
+        assertEquals("EUR", ratePeriod.getCurrency());
     }
 }

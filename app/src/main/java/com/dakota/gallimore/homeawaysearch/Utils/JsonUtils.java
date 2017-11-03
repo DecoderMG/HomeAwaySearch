@@ -69,9 +69,6 @@ public class JsonUtils {
                     }
                 }
             }
-
-
-
         } catch (JSONException e) {
             Log.d("Network Utils: ", e.getMessage());
             throw new JSONException("Invalid Json data for User type");
