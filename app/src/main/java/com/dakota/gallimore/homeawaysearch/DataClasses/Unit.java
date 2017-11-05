@@ -3,6 +3,7 @@ package com.dakota.gallimore.homeawaysearch.DataClasses;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by galli_000 on 11/3/2017.
@@ -27,6 +28,23 @@ public class Unit {
     private int numOfRatings;
     private double averageReviewScore;
     private int[] numOfReviewRatings;
+
+    private String availabilityDefault;
+    private String changeOverDefault;
+    private Date dateRangeBegin;
+    private Date dateRangeEnd;
+    private int maxStayDefault;
+    private int minPriorNotifyDefault;
+    private int minStayDefault;
+    private String stayIncrementDefault;
+    private String availability;
+    private int availableUnitCount;
+    private String changeOver;
+    private int[] maxStay;
+    private int[] minPriorNotify;
+    private int[] minStay;
+    private String stayIncrement;
+
 
     public Unit() {
         features = new ArrayList<>();
@@ -73,7 +91,39 @@ public class Unit {
 
         this.numOfRatings = reviews.size();
         updateReviewScore();
+    }
 
+    public Unit(int unitNumber, int unitArea, String areaUnit, ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms, ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds, int numOfBathrooms, int numOfBedrooms, String propertyType, int numOfRatings, double averageReviewScore, int[] numOfReviewRatings, String availabilityDefault, String changeOverDefault, Date dateRangeBegin, Date dateRangeEnd, int maxStayDefault, int minPriorNotifyDefault, int minStayDefault, String stayIncrementDefault, String availability, int availableUnitCount, String changeOver, int[] maxStay, int[] minPriorNotify, int[] minStay, String stayIncrement) {
+        this.unitNumber = unitNumber;
+        this.unitArea = unitArea;
+        this.areaUnit = areaUnit;
+        this.features = features;
+        this.reviews = reviews;
+        this.rooms = rooms;
+        this.ratePeriods = ratePeriods;
+        this.maxSleep = maxSleep;
+        this.maxSleepInBeds = maxSleepInBeds;
+        this.numOfBathrooms = numOfBathrooms;
+        this.numOfBedrooms = numOfBedrooms;
+        this.propertyType = propertyType;
+        this.numOfRatings = numOfRatings;
+        this.averageReviewScore = averageReviewScore;
+        this.numOfReviewRatings = numOfReviewRatings;
+        this.availabilityDefault = availabilityDefault;
+        this.changeOverDefault = changeOverDefault;
+        this.dateRangeBegin = dateRangeBegin;
+        this.dateRangeEnd = dateRangeEnd;
+        this.maxStayDefault = maxStayDefault;
+        this.minPriorNotifyDefault = minPriorNotifyDefault;
+        this.minStayDefault = minStayDefault;
+        this.stayIncrementDefault = stayIncrementDefault;
+        this.availability = availability;
+        this.availableUnitCount = availableUnitCount;
+        this.changeOver = changeOver;
+        this.maxStay = maxStay;
+        this.minPriorNotify = minPriorNotify;
+        this.minStay = minStay;
+        this.stayIncrement = stayIncrement;
     }
 
     public int getUnitNumber() {
@@ -293,6 +343,10 @@ public class Unit {
         return averageReviewScore;
     }
 
+    public void setAverageReviewScore(double averageReviewScore) {
+        this.averageReviewScore = averageReviewScore;
+    }
+
     public void setAverageReviewScore(float averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
@@ -303,5 +357,125 @@ public class Unit {
 
     public void setNumOfReviewRatings(int[] numOfReviewRatings) {
         this.numOfReviewRatings = numOfReviewRatings;
+    }
+
+    public String getAvailabilityDefault() {
+        return availabilityDefault;
+    }
+
+    public void setAvailabilityDefault(String availabilityDefault) {
+        this.availabilityDefault = availabilityDefault;
+    }
+
+    public String getChangeOverDefault() {
+        return changeOverDefault;
+    }
+
+    public void setChangeOverDefault(String changeOverDefault) {
+        this.changeOverDefault = changeOverDefault;
+    }
+
+    public Date getDateRangeBegin() {
+        return dateRangeBegin;
+    }
+
+    public void setDateRangeBegin(Date dateRangeBegin) {
+        this.dateRangeBegin = dateRangeBegin;
+    }
+
+    public Date getDateRangeEnd() {
+        return dateRangeEnd;
+    }
+
+    public void setDateRangeEnd(Date dateRangeEnd) {
+        this.dateRangeEnd = dateRangeEnd;
+    }
+
+    public int getMaxStayDefault() {
+        return maxStayDefault;
+    }
+
+    public void setMaxStayDefault(int maxStayDefault) {
+        this.maxStayDefault = maxStayDefault;
+    }
+
+    public int getMinPriorNotifyDefault() {
+        return minPriorNotifyDefault;
+    }
+
+    public void setMinPriorNotifyDefault(int minPriorNotifyDefault) {
+        this.minPriorNotifyDefault = minPriorNotifyDefault;
+    }
+
+    public int getMinStayDefault() {
+        return minStayDefault;
+    }
+
+    public void setMinStayDefault(int minStayDefault) {
+        this.minStayDefault = minStayDefault;
+    }
+
+    public String getStayIncrementDefault() {
+        return stayIncrementDefault;
+    }
+
+    public void setStayIncrementDefault(String stayIncrementDefault) {
+        this.stayIncrementDefault = stayIncrementDefault;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public int getAvailableUnitCount() {
+        return availableUnitCount;
+    }
+
+    public void setAvailableUnitCount(int availableUnitCount) {
+        this.availableUnitCount = availableUnitCount;
+    }
+
+    public String getChangeOver() {
+        return changeOver;
+    }
+
+    public void setChangeOver(String changeOver) {
+        this.changeOver = changeOver;
+    }
+
+    public int[] getMaxStay() {
+        return maxStay;
+    }
+
+    public void setMaxStay(int[] maxStay) {
+        this.maxStay = maxStay;
+    }
+
+    public int[] getMinPriorNotify() {
+        return minPriorNotify;
+    }
+
+    public void setMinPriorNotify(int[] minPriorNotify) {
+        this.minPriorNotify = minPriorNotify;
+    }
+
+    public int[] getMinStay() {
+        return minStay;
+    }
+
+    public void setMinStay(int[] minStay) {
+        this.minStay = minStay;
+    }
+
+    public String getStayIncrement() {
+        return stayIncrement;
+    }
+
+    public void setStayIncrement(String stayIncrement) {
+        this.stayIncrement = stayIncrement;
     }
 }
