@@ -76,6 +76,26 @@ public class Unit {
     public Unit(int unitNumber, int unitArea, String areaUnit,
                 ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
                 ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
+                int numOfBathrooms, int numOfBedrooms, String propertyType) {
+        this.unitNumber = unitNumber;
+        this.unitArea = unitArea;
+        this.areaUnit = areaUnit;
+        this.features = features;
+        this.reviews = reviews;
+        this.rooms = rooms;
+        this.ratePeriods = ratePeriods;
+        this.maxSleep = maxSleep;
+        this.maxSleepInBeds = maxSleepInBeds;
+        this.numOfBathrooms = numOfBathrooms;
+        this.numOfBedrooms = numOfBedrooms;
+        this.propertyType = propertyType;
+        this.numOfRatings = numOfRatings;
+        this.numOfReviewRatings = numOfReviewRatings;
+    }
+
+    public Unit(int unitNumber, int unitArea, String areaUnit,
+                ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
+                ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 String propertyType) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
@@ -343,11 +363,11 @@ public class Unit {
         return averageReviewScore;
     }
 
-    public void setAverageReviewScore(double averageReviewScore) {
+    public void setAverageReviewScore(float averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
-    public void setAverageReviewScore(float averageReviewScore) {
+    public void setAverageReviewScore(double averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
