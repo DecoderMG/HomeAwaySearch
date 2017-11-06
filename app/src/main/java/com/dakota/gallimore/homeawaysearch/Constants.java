@@ -64,4 +64,7 @@ public class Constants {
     public static final String JSON_MIN_STAY = "minimumStay";
     public static final String JSON_AMOUNT = "amount";
     public static final String JSON_CURRENCY = "currency";
+
+    public static final String JSON_HREF = "href";
+    public static final String JSON_REL = "rel";
 }
