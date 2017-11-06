@@ -2,6 +2,7 @@ package com.dakota.gallimore.homeawaysearch;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
@@ -429,5 +430,410 @@ public class ExampleUnitTest {
         assertEquals("", location.getCity());
         assertEquals("", location.getState());
         assertEquals("", location.getCountry());
+    }
+
+    @Test
+    public void JsonListingTest() throws Exception {
+        String listingJson = "{  " +
+                "  \"listingId\": \"6592159\",  " +
+                "  \"listingUrl\": \"https://www.homeaway.com/vacation-rental/p6592159\",  " +
+                "  \"sourceLocale\": \"es\",  " +
+                "  \"sourceLocaleName\": \"spanish\",  " +
+                "  \"adContent\": {  " +
+                "    \"description\": \"The apartment has been completely renovated with the finest materials. It is located in a typical old building in Madrid with corrala. Less than five minutes walk from the Gran Vía and tourist attractions of the city (Plaza Mayor, Puerta del Sol, Madrid de los Austrias) and with excellent communications with the city and surrounding areas.\",  " +
+                "    \"headline\": \"Spacious luxury apartment close to Gran Via\"  " +
+                "  },  " +
+                "  \"features\": [  " +
+                "    {  " +
+                "      \"count\": 1,  " +
+                "      \"category\": \"LOCATION_TYPE\",  " +
+                "      \"description\": \"town\",  " +
+                "      \"localizedName\": \"Town\"  " +
+                "    }  " +
+                "  ],  " +
+                "  \"location\": {  " +
+                "    \"lat\": 40.4255485534668,  " +
+                "    \"lng\": -3.7075681686401367  " +
+                "  },  " +
+                "  \"sites\": [  " +
+                "    {  " +
+                "      \"href\": \"https://www.homeaway.dk/feriehus/p6592159\",  " +
+                "      \"rel\": \"HOMEAWAY_DK\"  " +
+                "    },  " +
+                "    {  " +
+                "      \"href\": \"https://www.homeaway.se/semesterhus/p6592159\",  " +
+                "      \"rel\": \"HOMEAWAY_SE\"  " +
+                "    }  " +
+                "  ],  " +
+                "  \"photos\": {  " +
+                "    \"photos\": [  " +
+                "      {  " +
+                "        \"caption\": \"sitting area with TV set\",  " +
+                "        \"small\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 100,  " +
+                "            \"width\": 134  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.1\"  " +
+                "        },  " +
+                "        \"medium\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 270,  " +
+                "            \"width\": 361  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.9\"  " +
+                "        },  " +
+                "        \"large\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 663,  " +
+                "            \"width\": 1000  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10\"  " +
+                "        },  " +
+                "        \"originalDimension\": {  " +
+                "          \"height\": 663,  " +
+                "          \"width\": 1000  " +
+                "        }  " +
+                "      },  " +
+                "      {  " +
+                "        \"small\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 100,  " +
+                "            \"width\": 66  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.1\"  " +
+                "        },  " +
+                "        \"medium\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 270,  " +
+                "            \"width\": 178  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.9\"  " +
+                "        },  " +
+                "        \"large\": {  " +
+                "          \"dimension\": {  " +
+                "            \"height\": 768,  " +
+                "            \"width\": 508  " +
+                "          },  " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.10\"  " +
+                "        },  " +
+                "        \"originalDimension\": {  " +
+                "          \"height\": 1000,  " +
+                "          \"width\": 662  " +
+                "        }  " +
+                "      }  " +
+                "    ],  " +
+                "    \"thumbnails\": [  " +
+                "      {  " +
+                "        \"photo\": {  " +
+                "          \"caption\": \"sitting area with TV set\",  " +
+                "          \"small\": {  " +
+                "            \"dimension\": {  " +
+                "              \"height\": 100,  " +
+                "              \"width\": 134  " +
+                "            },  " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.1\"  " +
+                "          },  " +
+                "          \"medium\": {  " +
+                "            \"dimension\": {  " +
+                "              \"height\": 270,  " +
+                "              \"width\": 361  " +
+                "            },  " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.9\"  " +
+                "          },  " +
+                "          \"large\": {  " +
+                "            \"dimension\": {  " +
+                "              \"height\": 663,  " +
+                "              \"width\": 1000  " +
+                "            },  " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10\"  " +
+                "          },  " +
+                "          \"originalDimension\": {  " +
+                "            \"height\": 663,  " +
+                "            \"width\": 1000  " +
+                "          }  " +
+                "        },  " +
+                "        \"unitNumber\": 2052470  " +
+                "      }  " +
+                "    ]  " +
+                "  },  " +
+                "  \"units\": [  " +
+                "    {  " +
+                "      \"unitNumber\": 2052470,  " +
+                "      \"unitContent\": {  " +
+                "        \"area\": 115,  " +
+                "        \"areaUnit\": \"METERS_SQUARED\",  " +
+                "        \"bathrooms\": [  " +
+                "          {  " +
+                "            \"amenities\": [  " +
+                "              {  " +
+                "                \"count\": 1,  " +
+                "                \"category\": \"AMENITY\",  " +
+                "                \"description\": \"Toilet\",  " +
+                "                \"localizedName\": \"toilet\"  " +
+                "              }  " +
+                "            ],  " +
+                "            \"name\": \"Toilet 1\",  " +
+                "            \"roomSubType\": \"NO_TUB_OR_SHOWER\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"amenities\": [  " +
+                "              {  " +
+                "                \"count\": 1,  " +
+                "                \"category\": \"AMENITY\",  " +
+                "                \"description\": \"Shower\",  " +
+                "                \"localizedName\": \"shower\"  " +
+                "              }  " +
+                "            ],  " +
+                "            \"name\": \"Shower room 1\",  " +
+                "            \"roomSubType\": \"SHOWER_INDOOR_OR_OUTDOOR\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"amenities\": [  " +
+                "              {  " +
+                "                \"count\": 1,  " +
+                "                \"category\": \"AMENITY\",  " +
+                "                \"description\": \"Shower\",  " +
+                "                \"localizedName\": \"shower\"  " +
+                "              }  " +
+                "            ],  " +
+                "            \"name\": \"Shower room 2\",  " +
+                "            \"roomSubType\": \"SHOWER_INDOOR_OR_OUTDOOR\"  " +
+                "          }  " +
+                "        ],  " +
+                "        \"bedrooms\": [  " +
+                "          {  " +
+                "            \"amenities\": [],  " +
+                "            \"name\": \"Bedroom 1\",  " +
+                "            \"roomSubType\": \"BEDROOM\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"amenities\": [],  " +
+                "            \"name\": \"Bedroom 2\",  " +
+                "            \"roomSubType\": \"BEDROOM\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"amenities\": [],  " +
+                "            \"name\": \"Bedroom 3\",  " +
+                "            \"roomSubType\": \"BEDROOM\"  " +
+                "          }  " +
+                "        ],  " +
+                "        \"maxSleep\": 6,  " +
+                "        \"maxSleepInBeds\": 4,  " +
+                "        \"numberOfBathrooms\": 3,  " +
+                "        \"numberOfBedrooms\": 3,  " +
+                "        \"propertyType\": \"apartment\",  " +
+                "        \"features\": [  " +
+                "          {  " +
+                "            \"count\": 1,  " +
+                "            \"category\": \"GENERAL\",  " +
+                "            \"description\": \"air-conditioning\",  " +
+                "            \"localizedName\": \"Air Conditioning\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"count\": 1,  " +
+                "            \"category\": \"GENERAL\",  " +
+                "            \"description\": \"linen provided\",  " +
+                "            \"localizedName\": \"Linens Provided\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"count\": 1,  " +
+                "            \"category\": \"SUITABILITY\",  " +
+                "            \"description\": \"Handicapped Accessible (may have limitations)\",  " +
+                "            \"localizedName\": \"limited accessibility\"  " +
+                "          },  " +
+                "          {  " +
+                "            \"count\": 1,  " +
+                "            \"category\": \"KITCHEN\",  " +
+                "            \"description\": \"Kettle\",  " +
+                "            \"localizedName\": \"Kettle\"  " +
+                "          }  " +
+                "        ]  " +
+                "      },  " +
+                "      \"reviewSummary\": {  " +
+                "        \"reviewCount\": 1,  " +
+                "        \"averageRating\": 4,  " +
+                "        \"oneStarReviewCount\": 0,  " +
+                "        \"twoStarReviewCount\": 0,  " +
+                "        \"threeStarReviewCount\": 0,  " +
+                "        \"fourStarReviewCount\": 1,  " +
+                "        \"fiveStarReviewCount\": 0,  " +
+                "        \"guestbookReviewCount\": 0  " +
+                "      },  " +
+                "      \"unitReviewContent\": {  " +
+                "        \"size\": 1,  " +
+                "        \"page\": 1,  " +
+                "        \"entries\": [  " +
+                "          {  " +
+                "            \"arrivalDate\": \"2015-09-24T00:00:00.000Z\",  " +
+                "            \"reviewerName\": \"\",  " +
+                "            \"body\": \"appartement agréable.\",  " +
+                "            \"headline\": \"7/10\",  " +
+                "            \"helpfulCount\": 0,  " +
+                "            \"unhelpfulCount\": 0,  " +
+                "            \"reviewLocale\": \"fr_FR\"  " +
+                "          }  " +
+                "        ]  " +
+                "      },  " +
+                "      \"ratePeriods\": [  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-01-25\",  " +
+                "            \"endDate\": \"2014-03-13\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 750  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-03-22\",  " +
+                "            \"endDate\": \"2014-04-09\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 755  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-04-11\",  " +
+                "            \"endDate\": \"2014-04-20\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 900  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-04-22\",  " +
+                "            \"endDate\": \"2014-06-29\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 850  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-07-01\",  " +
+                "            \"endDate\": \"2014-08-30\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 900  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-09-01\",  " +
+                "            \"endDate\": \"2014-12-17\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 750  " +
+                "            }  " +
+                "          }  " +
+                "        },  " +
+                "        {  " +
+                "          \"dateRange\": {  " +
+                "            \"beginDate\": \"2014-12-19\",  " +
+                "            \"endDate\": \"2015-01-05\"  " +
+                "          },  " +
+                "          \"minimumStay\": 7,  " +
+                "          \"rates\": {  " +
+                "            \"weekly\": {  " +
+                "              \"currency\": \"EUR\",  " +
+                "              \"amount\": 1200  " +
+                "            }  " +
+                "          }  " +
+                "        }  " +
+                "      ],  " +
+                "      \"unitAvailability\": {  " +
+                "        \"availabilityDefault\": \"Y\",  " +
+                "        \"changeOverDefault\": \"C\",  " +
+                "        \"dateRange\": {  " +
+                "          \"beginDate\": \"2015-10-16\",  " +
+                "          \"endDate\": \"2018-10-15\"  " +
+                "        },  " +
+                "        \"maxStayDefault\": 0,  " +
+                "        \"minPriorNotifyDefault\": 1,  " +
+                "        \"minStayDefault\": 0,  " +
+                "        \"stayIncrementDefault\": \"D\",  " +
+                "        \"unitAvailabilityConfiguration\": {  " +
+                "          \"availability\": \"NNNNNNNNNYNNNNNNNYYYNNNNNNNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNNNNNNYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\",  " +
+                "          \"availableUnitCount\": null,  " +
+                "          \"changeOver\": \"XXXXXXXXXXOXXXXXXIOOOXXXXXXICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOOOOOOOXXXXXXICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOOOXXXXXXXXXXXICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\",  " +
+                "          \"maxStay\": \"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",  " +
+                "          \"minPriorNotify\": \"1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1\",  " +
+                "          \"minStay\": \"3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3\",  " +
+                "          \"stayIncrement\": \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\"  " +
+                "        }  " +
+                "      }  " +
+                "    }  " +
+                "  ]  " +
+                "}";
+
+        JSONObject jsonObject = new JSONObject(listingJson);
+        Listing listing = JsonUtils.parseListingJson(jsonObject);
+
+        assertEquals("6592159", listing.getListingId());
+        assertEquals("https://www.homeaway.com/vacation-rental/p6592159", listing.getListingUrl());
+        assertEquals("es", listing.getSourceLocale());
+        assertEquals("spanish", listing.getSourceLocaleName());
+
+        assertEquals("The apartment has been completely renovated with the finest materials. It is located in a typical old building in Madrid with corrala. Less than five minutes walk from the Gran Vía and tourist attractions of the city (Plaza Mayor, Puerta del Sol, Madrid de los Austrias) and with excellent communications with the city and surrounding areas.", listing.getDescription());
+        assertEquals("Spacious luxury apartment close to Gran Via", listing.getHeadline());
+
+        assertEquals(1, listing.getFeature(0).getCount());
+        assertEquals("town", listing.getFeature(0).getDescription());
+
+        assertEquals(40.4255485534668, listing.getLocation().getLatitude(), 0);
+        assertEquals(-3.7075681686401367, listing.getLocation().getLongitude(), 0);
+        assertEquals("", listing.getLocation().getCity());
+
+        assertEquals("https://www.homeaway.se/semesterhus/p6592159", listing.getSite(1).getHref());
+        assertEquals("HOMEAWAY_SE", listing.getSite(1).getRel());
+
+        assertEquals("photo", listing.getPhoto(1).getImageType());
+        assertEquals(new URL("http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.10"), listing.getPhoto(1).getUri());
+
+        assertEquals("thumbnail", listing.getPhoto(2).getImageType());
+        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"), listing.getPhoto(2).getUri());
+
+        assertEquals(2052470, listing.getUnit(0).getUnitNumber());
+        assertEquals("METERS_SQUARED", listing.getUnit(0).getAreaUnit());
+
+        assertEquals("bathroom", listing.getUnit(0).getRoom(0).getRoomType());
+
+        assertEquals("AMENITY", listing.getUnit(0).getRoom(0).getAmenities().get(0).getCategory());
+        assertEquals("Toilet", listing.getUnit(0).getRoom(0).getAmenities().get(0).getDescription());
+
+        assertEquals(6, listing.getUnit(0).getMaxSleep());
+
+        assertEquals("Kettle", listing.getUnit(0).getFeature(3).getLocalizedName());
+
+        assertEquals("7/10", listing.getUnit(0).getReview(0).getHeadline());
+
+        assertEquals(755, listing.getUnit(0).getRatePeriod(1).getWeeklyRate(), 0);
     }
 }

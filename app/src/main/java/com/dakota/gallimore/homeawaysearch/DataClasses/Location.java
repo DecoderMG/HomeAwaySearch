@@ -14,6 +14,11 @@ public class Location {
     private String country;
 
     public Location() {
+        latitude = 0.0;
+        longitude = 0.0;
+        city = "";
+        state = "";
+        country = "";
     }
 
     public Location(double latitude, double longitude, String city,
