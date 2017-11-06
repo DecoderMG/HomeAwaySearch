@@ -3,6 +3,7 @@ package com.dakota.gallimore.homeawaysearch;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
@@ -413,5 +414,20 @@ public class ExampleUnitTest {
         Site site = JsonUtils.parseSiteJson(jsonObject);
         assertEquals("https://www.homeaway.dk/feriehus/p6592159", site.getHref());
         assertEquals("HOMEAWAY_DK", site.getRel());
+    }
+
+    @Test
+    public void JsonLocationTest() throws Exception {
+        String locationJson = "{" +
+                "    \"lat\": 40.4255485534668," +
+                "    \"lng\": -3.7075681686401367" +
+                "  }";
+        JSONObject jsonObject = new JSONObject(locationJson);
+        Location location = JsonUtils.parseLocationJson(jsonObject);
+        assertEquals(40.4255485534668, location.getLatitude(), 0);
+        assertEquals(-3.7075681686401367, location.getLongitude(), 0);
+        assertEquals("", location.getCity());
+        assertEquals("", location.getState());
+        assertEquals("", location.getCountry());
     }
 }
