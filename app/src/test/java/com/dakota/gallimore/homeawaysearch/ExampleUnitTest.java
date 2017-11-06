@@ -2,6 +2,7 @@ package com.dakota.gallimore.homeawaysearch;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
@@ -11,6 +12,7 @@ import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -316,5 +318,86 @@ public class ExampleUnitTest {
         assertEquals("air-conditioning", unit.getFeature(0).getDescription());
         assertEquals(7, unit.getRatePeriod(0).getMinimumStay());
         assertEquals("appartement agréable ,très bien situé avec une station de métro au pas de la porte.", unit.getReview(0).getBody());
+    }
+
+    @Test
+    public void JsonListingMediaPhotoTest() throws Exception {
+        String listingMediaJson = "{ " +
+                "        \"caption\": \"sitting area with TV set\", " +
+                "        \"small\": { " +
+                "          \"dimension\": { " +
+                "            \"height\": 100, " +
+                "            \"width\": 134 " +
+                "          }, " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.1\" " +
+                "        }, " +
+                "        \"medium\": { " +
+                "          \"dimension\": { " +
+                "            \"height\": 270, " +
+                "            \"width\": 361 " +
+                "          }, " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.9\" " +
+                "        }, " +
+                "        \"large\": { " +
+                "          \"dimension\": { " +
+                "            \"height\": 663, " +
+                "            \"width\": 1000 " +
+                "          }, " +
+                "          \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10\" " +
+                "        }, " +
+                "        \"originalDimension\": { " +
+                "          \"height\": 663, " +
+                "          \"width\": 1000 " +
+                "        } " +
+                "      }";
+        JSONObject jsonObject = new JSONObject(listingMediaJson);
+        ListingMedia listingMedia = JsonUtils.parseMediaJson(jsonObject, "photo");
+        assertEquals("sitting area with TV set", listingMedia.getCaption());
+        assertEquals(663, listingMedia.getHeight());
+        assertEquals(1000, listingMedia.getWidth());
+        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"),
+                listingMedia.getUri());
+    }
+
+    public void JsonListingMediaThumbnailTest() throws Exception {
+        String listingMediaJson = "{ " +
+                "        \"photo\": { " +
+                "          \"caption\": \"sitting area with TV set\", " +
+                "          \"small\": { " +
+                "            \"dimension\": { " +
+                "              \"height\": 100, " +
+                "              \"width\": 134 " +
+                "            }, " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.1\" " +
+                "          }, " +
+                "          \"medium\": { " +
+                "            \"dimension\": { " +
+                "              \"height\": 270, " +
+                "              \"width\": 361 " +
+                "            }, " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.9\" " +
+                "          }, " +
+                "          \"large\": { " +
+                "            \"dimension\": { " +
+                "              \"height\": 663, " +
+                "              \"width\": 1000 " +
+                "            }, " +
+                "            \"uri\": \"http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10\" " +
+                "          }, " +
+                "          \"originalDimension\": { " +
+                "            \"height\": 663, " +
+                "            \"width\": 1000 " +
+                "          } " +
+                "        }, " +
+                "        \"unitNumber\": 2052470 " +
+                "      }";
+        JSONObject jsonObject = new JSONObject(listingMediaJson);
+        ListingMedia listingMedia = JsonUtils.parseMediaJson(jsonObject, "thumbnail");
+        assertEquals("sitting area with TV set", listingMedia.getCaption());
+        assertEquals(663, listingMedia.getHeight());
+        assertEquals(1000, listingMedia.getWidth());
+        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"),
+                listingMedia.getUri());
+        assertEquals(2052470, listingMedia.getUnitNumber());
     }
 }
