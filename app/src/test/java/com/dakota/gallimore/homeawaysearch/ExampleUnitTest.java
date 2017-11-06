@@ -6,6 +6,7 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Site;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Unit;
 import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
 
@@ -359,6 +360,7 @@ public class ExampleUnitTest {
                 listingMedia.getUri());
     }
 
+    @Test
     public void JsonListingMediaThumbnailTest() throws Exception {
         String listingMediaJson = "{ " +
                 "        \"photo\": { " +
@@ -399,5 +401,17 @@ public class ExampleUnitTest {
         assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"),
                 listingMedia.getUri());
         assertEquals(2052470, listingMedia.getUnitNumber());
+    }
+
+    @Test
+    public void JsonSiteTest() throws Exception {
+        String siteJson = "{" +
+                "      \"href\": \"https://www.homeaway.dk/feriehus/p6592159\"," +
+                "      \"rel\": \"HOMEAWAY_DK\"" +
+                "    }";
+        JSONObject jsonObject = new JSONObject(siteJson);
+        Site site = JsonUtils.parseSiteJson(jsonObject);
+        assertEquals("https://www.homeaway.dk/feriehus/p6592159", site.getHref());
+        assertEquals("HOMEAWAY_DK", site.getRel());
     }
 }
