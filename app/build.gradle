@@ -12,6 +12,9 @@ android {
         manifestPlaceholders = [
                 'appAuthRedirectScheme': 'appscheme://ws.homeaway.com/auth-code'
         ]
+        testOptions {
+            unitTests.returnDefaultValues = true
+        }
     }
     buildTypes {
         release {
