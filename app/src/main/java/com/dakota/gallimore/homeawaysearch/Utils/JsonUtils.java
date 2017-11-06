@@ -7,6 +7,7 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Unit;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 
 import org.json.JSONArray;
@@ -183,5 +184,63 @@ public class JsonUtils {
             e.printStackTrace();
         }
         return new RatePeriod(arrivalDate, leaveDate, minimumStay, weeklyRate, currency);
+    }
+
+    public static Unit parseUnitJson(JSONObject jsonObject) throws JSONException {
+        int unitNumber = 0;
+        int unitArea = 0;
+        String areaUnit = "";
+
+        ArrayList<Feature> features = new ArrayList<>();
+        ArrayList<Review> reviews = new ArrayList<>();
+        ArrayList<Room> rooms = new ArrayList<>();
+        ArrayList<RatePeriod> ratePeriods = new ArrayList<>();
+
+        int maxSleep = 1;
+        int maxSleepInBeds = 1;
+        int numOfBathrooms = 0;
+        int numOfBedrooms = 0;
+        String propertyType = "";
+        int numOfRatings = 0;
+        double averageReviewScore = 0;
+
+        try {
+            unitNumber = jsonObject.getInt("unitNumber");
+            JSONObject unitContent = jsonObject.getJSONObject("unitContent");
+            unitArea = unitContent.getInt("area");
+            areaUnit = unitContent.getString("areaUnit");
+            JSONArray bathroomArray = unitContent.getJSONArray("bathrooms");
+            for (int i = 0; i < bathroomArray.length(); i++) {
+                rooms.add(parseRoomJson(bathroomArray.getJSONObject(i), "bathroom"));
+            }
+            JSONArray bedroomArray = unitContent.getJSONArray("bedrooms");
+            for (int i = 0; i < bedroomArray.length(); i++) {
+                rooms.add(parseRoomJson(bedroomArray.getJSONObject(i), "bedroom"));
+            }
+            maxSleep = unitContent.getInt("maxSleep");
+            maxSleepInBeds = unitContent.getInt("maxSleepInBeds");
+            numOfBathrooms = bathroomArray.length();
+            numOfBedrooms = bedroomArray.length();
+            propertyType = unitContent.getString("propertyType");
+            JSONArray featureArray = unitContent.getJSONArray("features");
+            for (int i = 0; i < featureArray.length(); i++) {
+                features.add(parseFeatureJson(featureArray.getJSONObject(i)));
+            }
+            JSONArray reviewContent = jsonObject.getJSONObject("unitReviewContent").getJSONArray("entries");
+            for (int i = 0; i < reviewContent.length(); i++) {
+                reviews.add(parseReviewJson(reviewContent.getJSONObject(i)));
+            }
+            JSONArray ratePeriodArray = jsonObject.getJSONArray("ratePeriods");
+            for (int i = 0; i < ratePeriodArray.length(); i++) {
+                ratePeriods.add(parseRatePeriodJson(ratePeriodArray.getJSONObject(i)));
+            }
+            return new Unit(unitNumber, unitArea, areaUnit,
+                    features, reviews, rooms, ratePeriods, maxSleep,
+                    maxSleepInBeds, numOfBathrooms, numOfBedrooms, propertyType);
+            //JSONObject unitAvailibility = unitContent.getJSONObject("unitAvailability");
+        } catch (JSONException e) {
+            Log.d("JSON Utils: ", e.getMessage());
+            throw new JSONException("Invalid JSON data for User type");
+        }
     }
 }
