@@ -67,12 +67,24 @@ public class Constants {
     public static final String JSON_AMOUNT = "amount";
     public static final String JSON_CURRENCY = "currency";
 
+    public static final String JSON_SITES = "sites";
     public static final String JSON_HREF = "href";
     public static final String JSON_REL = "rel";
 
+    public static final String JSON_LOCATION = "location";
     public static final String JSON_LATITUDE = "lat";
     public static final String JSON_LONGITUDE = "lng";
     public static final String JSON_CITY = "city";
     public static final String JSON_STATE = "state";
     public static final String JSON_COUNTRY = "country";
+
+    public static final String JSON_LISTING_ID = "listingId";
+    public static final String JSON_LISTING_URL = "listingUrl";
+    public static final String JSON_SOURCE_LOCALE = "sourceLocale";
+    public static final String JSON_SOURCE_LOCALE_NAME = "sourceLocaleName";
+    public static final String JSON_AD_CONTENT = "adContent";
+
+    public static final String JSON_PHOTOS = "photos";
+    public static final String JSON_THUMBNAILS = "thumbnails";
+    public static final String JSON_UNITS = "units";
 }
