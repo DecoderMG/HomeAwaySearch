@@ -6,6 +6,7 @@ import com.dakota.gallimore.homeawaysearch.Constants;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
@@ -292,6 +293,36 @@ public class JsonUtils {
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid JSON date for Site type");
+        }
+    }
+
+    public static Location parseLocationJson(JSONObject jsonObject) throws JSONException {
+        double lat = 0;
+        double lng = 0;
+        String city = "";
+        String state = "";
+        String counrty = "";
+
+        try {
+            if (!jsonObject.isNull(Constants.JSON_LATITUDE)) {
+                lat = jsonObject.getDouble(Constants.JSON_LATITUDE);
+            }
+            if (!jsonObject.isNull(Constants.JSON_LONGITUDE)) {
+                lng = jsonObject.getDouble(Constants.JSON_LONGITUDE);
+            }
+            if (!jsonObject.isNull(Constants.JSON_CITY)) {
+                city = jsonObject.getString(Constants.JSON_CITY);
+            }
+            if (!jsonObject.isNull(Constants.JSON_STATE)) {
+                state = jsonObject.getString(Constants.JSON_STATE);
+            }
+            if (!jsonObject.isNull(Constants.JSON_COUNTRY)) {
+                counrty = jsonObject.getString(Constants.JSON_COUNTRY);
+            }
+            return new Location(lat, lng, city, state, counrty);
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON data for Location type");
         }
     }
 }
