@@ -2,6 +2,7 @@ package com.dakota.gallimore.homeawaysearch.Utils;
 
 import android.util.Log;
 
+import com.dakota.gallimore.homeawaysearch.Constants;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
@@ -47,34 +48,34 @@ public class JsonUtils {
 
         try {
 
-            if (!object.isNull("firstName") && !object.isNull("lastName")) {
-                firstName = object.getString("firstName");
-                lastName = object.getString("lastName");
+            if (!object.isNull(Constants.JSON_FIRST_NAME) && !object.isNull(Constants.JSON_LAST_NAME)) {
+                firstName = object.getString(Constants.JSON_FIRST_NAME);
+                lastName = object.getString(Constants.JSON_LAST_NAME);
             }
-            if (!object.isNull("emailAddress")) {
-                email = object.getString("emailAddress");
+            if (!object.isNull(Constants.JSON_EMAIL)) {
+                email = object.getString(Constants.JSON_EMAIL);
             }
-            if (!object.isNull("id")) {
-                id = object.getString("id");
+            if (!object.isNull(Constants.JSON_ID)) {
+                id = object.getString(Constants.JSON_ID);
             }
 
-            if (!object.isNull("accounts")) {
-                accountsArray = object.getJSONArray("accounts");
+            if (!object.isNull(Constants.JSON_ACCOUNTS)) {
+                accountsArray = object.getJSONArray(Constants.JSON_ACCOUNTS);
 
                 allAccounts = new String[accountsArray.length()];
 
                 for (int i = 0; i < accountsArray.length(); i++) {
                     JSONObject account = accountsArray.getJSONObject(i);
-                    allAccounts[i] = account.getString("accountType");
+                    allAccounts[i] = account.getString(Constants.JSON_ACCOUNT_TYPE);
 
-                    if (!account.isNull("advertiser")) {
-                        JSONObject advertiser = account.getJSONObject("advertiser");
-                        homeSite = advertiser.getString("site");
+                    if (!account.isNull(Constants.JSON_ADVERTISER)) {
+                        JSONObject advertiser = account.getJSONObject(Constants.JSON_ADVERTISER);
+                        homeSite = advertiser.getString(Constants.JSON_SITE);
                     }
                 }
             }
         } catch (JSONException e) {
-            Log.d("Network Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for User type");
 
         }
@@ -88,12 +89,12 @@ public class JsonUtils {
         String localizedName = "";
 
         try {
-            count = jsonObject.getInt("count");
-            category = jsonObject.getString("category");
-            description = jsonObject.getString("description");
-            localizedName = jsonObject.getString("localizedName");
+            count = jsonObject.getInt(Constants.JSON_COUNT);
+            category = jsonObject.getString(Constants.JSON_CATEGORY);
+            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
+            localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
-            Log.d("Network utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Amenities type");
         }
         return new Amenities(count, category, description, localizedName);
@@ -105,15 +106,15 @@ public class JsonUtils {
         String roomSubType = "";
 
         try {
-            JSONArray amenitiesJson = jsonObject.getJSONArray("amenities");
+            JSONArray amenitiesJson = jsonObject.getJSONArray(Constants.JSON_AMENITIES);
             for (int i = 0; i < amenitiesJson.length(); i++) {
                 Amenities amenity = parseAmenityJson(amenitiesJson.getJSONObject(i));
                 amenities.add(amenity);
             }
-            roomName = jsonObject.getString("name");
-            roomSubType = jsonObject.getString("roomSubType");
+            roomName = jsonObject.getString(Constants.JSON_NAME);
+            roomSubType = jsonObject.getString(Constants.JSON_ROOM_SUBTYPE);
         } catch (JSONException e) {
-            Log.d("Network utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Room type");
         }
 
@@ -131,15 +132,15 @@ public class JsonUtils {
         String reviewLocale = "";
 
         try {
-            reviewDate = jsonObject.getString("arrivalDate");
-            reviewerName = jsonObject.getString("reviewerName");
-            body = jsonObject.getString("body");
-            headline = jsonObject.getString("headline");
-            helpfulCount = jsonObject.getInt("helpfulCount");
-            unhelpfulCount = jsonObject.getInt("unhelpfulCount");
-            reviewLocale = jsonObject.getString("reviewLocale");
+            reviewDate = jsonObject.getString(Constants.JSON_ARRIVAL_DATE);
+            reviewerName = jsonObject.getString(Constants.JSON_REVIEWER_NAME);
+            body = jsonObject.getString(Constants.JSON_BODY);
+            headline = jsonObject.getString(Constants.JSON_HEADLINE);
+            helpfulCount = jsonObject.getInt(Constants.JSON_HELPFUL_COUNT);
+            unhelpfulCount = jsonObject.getInt(Constants.JSON_UNHELPFUL_COUNT);
+            reviewLocale = jsonObject.getString(Constants.JSON_REVIEW_LOCALE);
         } catch (JSONException e) {
-            Log.d("Network Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Review type");
         }
 
@@ -153,12 +154,12 @@ public class JsonUtils {
         String localizedName;
 
         try {
-            count = jsonObject.getInt("count");
-            category = jsonObject.getString("category");
-            description = jsonObject.getString("description");
-            localizedName = jsonObject.getString("localizedName");
+            count = jsonObject.getInt(Constants.JSON_COUNT);
+            category = jsonObject.getString(Constants.JSON_CATEGORY);
+            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
+            localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
-            Log.d("Network Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Feature type");
         }
 
@@ -173,15 +174,15 @@ public class JsonUtils {
         String currency = "";
 
         try {
-            JSONObject dateRange = jsonObject.getJSONObject("dateRange");
-            JSONObject weeklyObject = jsonObject.getJSONObject("rates").getJSONObject("weekly");
-            arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString("beginDate"));
-            leaveDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString("endDate"));
-            minimumStay = jsonObject.getInt("minimumStay");
-            weeklyRate = weeklyObject.getDouble("amount");
-            currency = weeklyObject.getString("currency");
+            JSONObject dateRange = jsonObject.getJSONObject(Constants.JSON_DATE_RANGE);
+            JSONObject weeklyObject = jsonObject.getJSONObject(Constants.JSON_RATES).getJSONObject(Constants.JSON_WEEKLY);
+            arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString(Constants.JSON_BEGIN_DATE));
+            leaveDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString(Constants.JSON_END_DATE));
+            minimumStay = jsonObject.getInt(Constants.JSON_MIN_STAY);
+            weeklyRate = weeklyObject.getDouble(Constants.JSON_AMOUNT);
+            currency = weeklyObject.getString(Constants.JSON_CURRENCY);
         } catch (JSONException e) {
-            Log.d("Network Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for RatePeriod type");
         } catch (ParseException e) {
             e.printStackTrace();
@@ -208,32 +209,33 @@ public class JsonUtils {
         double averageReviewScore = 0;
 
         try {
-            unitNumber = jsonObject.getInt("unitNumber");
-            JSONObject unitContent = jsonObject.getJSONObject("unitContent");
-            unitArea = unitContent.getInt("area");
-            areaUnit = unitContent.getString("areaUnit");
-            JSONArray bathroomArray = unitContent.getJSONArray("bathrooms");
+            unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
+            JSONObject unitContent = jsonObject.getJSONObject(Constants.JSON_UNIT_CONTENT);
+            unitArea = unitContent.getInt(Constants.JSON_AREA);
+            areaUnit = unitContent.getString(Constants.JSON_AREA_UNIT);
+            JSONArray bathroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BATHROOMS);
             for (int i = 0; i < bathroomArray.length(); i++) {
                 rooms.add(parseRoomJson(bathroomArray.getJSONObject(i), "bathroom"));
             }
-            JSONArray bedroomArray = unitContent.getJSONArray("bedrooms");
+            JSONArray bedroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BEDROOMS);
             for (int i = 0; i < bedroomArray.length(); i++) {
                 rooms.add(parseRoomJson(bedroomArray.getJSONObject(i), "bedroom"));
             }
-            maxSleep = unitContent.getInt("maxSleep");
-            maxSleepInBeds = unitContent.getInt("maxSleepInBeds");
+            maxSleep = unitContent.getInt(Constants.JSON_MAX_SLEEP);
+            maxSleepInBeds = unitContent.getInt(Constants.JSON_MAX_SLEEP_IN_BEDS);
             numOfBathrooms = bathroomArray.length();
             numOfBedrooms = bedroomArray.length();
-            propertyType = unitContent.getString("propertyType");
-            JSONArray featureArray = unitContent.getJSONArray("features");
+            propertyType = unitContent.getString(Constants.JSON_PROPERTY_TYPE);
+            JSONArray featureArray = unitContent.getJSONArray(Constants.JSON_FEATURES);
             for (int i = 0; i < featureArray.length(); i++) {
                 features.add(parseFeatureJson(featureArray.getJSONObject(i)));
             }
-            JSONArray reviewContent = jsonObject.getJSONObject("unitReviewContent").getJSONArray("entries");
+            JSONArray reviewContent = jsonObject.getJSONObject(Constants.JSON_UNIT_REVIEW_CONTENT)
+                    .getJSONArray(Constants.JSON_ENTRIES);
             for (int i = 0; i < reviewContent.length(); i++) {
                 reviews.add(parseReviewJson(reviewContent.getJSONObject(i)));
             }
-            JSONArray ratePeriodArray = jsonObject.getJSONArray("ratePeriods");
+            JSONArray ratePeriodArray = jsonObject.getJSONArray(Constants.JSON_RATE_PERIODS);
             for (int i = 0; i < ratePeriodArray.length(); i++) {
                 ratePeriods.add(parseRatePeriodJson(ratePeriodArray.getJSONObject(i)));
             }
@@ -242,7 +244,7 @@ public class JsonUtils {
                     maxSleepInBeds, numOfBathrooms, numOfBedrooms, propertyType);
             //JSONObject unitAvailibility = unitContent.getJSONObject("unitAvailability");
         } catch (JSONException e) {
-            Log.d("JSON Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid JSON data for User type");
         }
     }
@@ -255,24 +257,24 @@ public class JsonUtils {
         int unitNumber = 0;
 
         try {
-            if (!imageType.equals("photo")) {
-                caption = jsonObject.getJSONObject("photo").getString("caption");
-                unitNumber = jsonObject.getInt("unitNumber");
+            if (!imageType.equals(Constants.JSON_PHOTO_IMAGE_TYPE)) {
+                caption = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE).getString(Constants.JSON_CAPTION);
+                unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
             } else {
-                caption = jsonObject.getString("caption");
+                caption = jsonObject.getString(Constants.JSON_CAPTION);
             }
-            JSONObject imageSpecs = jsonObject.getJSONObject("large");
-            height = imageSpecs.getJSONObject("dimension").getInt("height");
-            width = imageSpecs.getJSONObject("dimension").getInt("width");
-            url = new URL(imageSpecs.getString("uri"));
+            JSONObject imageSpecs = jsonObject.getJSONObject(Constants.JSON_IMAGE_LARGE_SIZE);
+            height = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_HEIGHT);
+            width = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_WIDTH);
+            url = new URL(imageSpecs.getString(Constants.JSON_URL));
 
             return new ListingMedia(caption, height, width, imageType, url, unitNumber);
 
         } catch (JSONException e) {
-            Log.d("JSON Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid JSON data for Media type");
         } catch (MalformedURLException e) {
-            Log.d("JSON Utils: ", e.getMessage());
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Unable to parse image URI");
         }
     }

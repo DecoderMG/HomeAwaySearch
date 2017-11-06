@@ -2,6 +2,8 @@ package com.dakota.gallimore.homeawaysearch.Utils;
 
 import android.util.Log;
 
+import com.dakota.gallimore.homeawaysearch.Constants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +46,7 @@ public class NetworkUtils {
             @Override
             public void onFailure(Call call, final IOException e) {
                 final String exception = e.getMessage();
-                Log.d("Networking Utils: ", exception);
+                Log.d(Constants.NETWORK_LOG_TAG, exception);
                 try {
                     networkCallback.onJsonObjectReturn(new JSONObject(""));
                 } catch (JSONException e1) {
@@ -60,7 +62,7 @@ public class NetworkUtils {
                     try {
                         jsonObject = new JSONObject(response.body().string());
                         networkCallback.onJsonObjectReturn(jsonObject);
-                        Log.d("Networking Utils: ", response.body().toString());
+                        Log.d(Constants.NETWORK_LOG_TAG, response.body().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (NullPointerException npe) {
