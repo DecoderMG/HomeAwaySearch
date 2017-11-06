@@ -9,6 +9,8 @@ public class Constants {
     public static final String JSON_LOG_TAG = "Json Utils: ";
     public static final String NETWORK_LOG_TAG = "Network Utils: ";
     public static final String AUTH_LOG_TAG = "Auth Utils: ";
+    public static final String UNIT_CLASS_LOG_TAG = "Unit Class: ";
+    public static final String LISTING_CLASS_LOG_TAG = "Listing Class: ";
 
     public static final String JSON_FIRST_NAME = "firstName";
     public static final String JSON_LAST_NAME = "lastName";
