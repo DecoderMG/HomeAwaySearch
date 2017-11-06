@@ -5,6 +5,7 @@ import android.util.Log;
 import com.dakota.gallimore.homeawaysearch.Constants;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Amenities;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
@@ -78,7 +79,7 @@ public class JsonUtils {
             }
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for User type");
+            throw new JSONException("Invalid Json data for User type with error: " + e.getMessage());
 
         }
         return new User(firstName, lastName, email, allAccounts, id, homeSite, 0);
@@ -97,7 +98,7 @@ public class JsonUtils {
             localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for Amenities type");
+            throw new JSONException("Invalid Json data for Amenities type with error: " + e.getMessage());
         }
         return new Amenities(count, category, description, localizedName);
     }
@@ -117,7 +118,7 @@ public class JsonUtils {
             roomSubType = jsonObject.getString(Constants.JSON_ROOM_SUBTYPE);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for Room type");
+            throw new JSONException("Invalid Json data for Room type with error: " + e.getMessage());
         }
 
         return new Room(amenities, roomName, roomSubType, roomType);
@@ -143,7 +144,7 @@ public class JsonUtils {
             reviewLocale = jsonObject.getString(Constants.JSON_REVIEW_LOCALE);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for Review type");
+            throw new JSONException("Invalid Json data for Review type with error: " + e.getMessage());
         }
 
         return new Review(reviewDate, reviewerName, body, headline, helpfulCount, unhelpfulCount, reviewLocale);
@@ -162,7 +163,7 @@ public class JsonUtils {
             localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for Feature type");
+            throw new JSONException("Invalid Json data for Feature type with error: " + e.getMessage());
         }
 
         return new Feature(count, category, description, localizedName);
@@ -185,7 +186,7 @@ public class JsonUtils {
             currency = weeklyObject.getString(Constants.JSON_CURRENCY);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid Json data for RatePeriod type");
+            throw new JSONException("Invalid Json data for RatePeriod type with error: " + e.getMessage());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -247,7 +248,7 @@ public class JsonUtils {
             //JSONObject unitAvailibility = unitContent.getJSONObject("unitAvailability");
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid JSON data for User type");
+            throw new JSONException("Invalid JSON data for User type with error: " + e.getMessage());
         }
     }
 
@@ -264,7 +265,9 @@ public class JsonUtils {
                 unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
                 jsonObject = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE);
             } else {
-                caption = jsonObject.getString(Constants.JSON_CAPTION);
+                if (!jsonObject.isNull(Constants.JSON_CAPTION)) {
+                    caption = jsonObject.getString(Constants.JSON_CAPTION);
+                }
             }
             JSONObject imageSpecs = jsonObject.getJSONObject(Constants.JSON_IMAGE_LARGE_SIZE);
             height = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_HEIGHT);
@@ -275,10 +278,10 @@ public class JsonUtils {
 
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid JSON data for Media type");
+            throw new JSONException("Invalid JSON data for Media type with error: " + e.getMessage());
         } catch (MalformedURLException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Unable to parse image URI");
+            throw new JSONException("Unable to parse image URI with error: " + e.getMessage());
         }
     }
 
@@ -292,7 +295,7 @@ public class JsonUtils {
             return new Site(href, rel);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid JSON date for Site type");
+            throw new JSONException("Invalid JSON date for Site type with error: " + e.getMessage());
         }
     }
 
@@ -322,7 +325,69 @@ public class JsonUtils {
             return new Location(lat, lng, city, state, counrty);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Invalid JSON data for Location type");
+            throw new JSONException("Invalid JSON data for Location type with error: " + e.getMessage());
+        }
+    }
+
+    public static Listing parseListingJson(JSONObject jsonObject) throws JSONException {
+        String listingId = "";
+        String listingUrl = "";
+        String sourceLocale = "";
+        String sourceLocaleName = "";
+        String description = "";
+        String headline = "";
+        ArrayList<Feature> features = new ArrayList<>();
+        Location location = new Location();
+        ArrayList<Site> sites = new ArrayList<>();
+        ArrayList<ListingMedia> photos = new ArrayList<>();
+        ArrayList<Unit> units = new ArrayList<>();
+
+        try {
+            listingId = jsonObject.getString(Constants.JSON_LISTING_ID);
+            listingUrl = jsonObject.getString(Constants.JSON_LISTING_URL);
+            sourceLocale = jsonObject.getString(Constants.JSON_SOURCE_LOCALE);
+            sourceLocaleName = jsonObject.getString(Constants.JSON_SOURCE_LOCALE_NAME);
+
+            JSONObject adContent = jsonObject.getJSONObject(Constants.JSON_AD_CONTENT);
+            description = adContent.getString(Constants.JSON_DESCRIPTION);
+            headline = adContent.getString(Constants.JSON_HEADLINE);
+
+            JSONArray featuresJsonArray = jsonObject.getJSONArray(Constants.JSON_FEATURES);
+            for (int i = 0; i < featuresJsonArray.length(); i++) {
+                features.add(parseFeatureJson(featuresJsonArray.getJSONObject(i)));
+            }
+
+            location = parseLocationJson(jsonObject.getJSONObject(Constants.JSON_LOCATION));
+
+            JSONArray sitesJsonArray = jsonObject.getJSONArray(Constants.JSON_SITES);
+            for (int i = 0; i < sitesJsonArray.length(); i++) {
+                sites.add(parseSiteJson(sitesJsonArray.getJSONObject(i)));
+            }
+
+            JSONObject photosJson = jsonObject.getJSONObject(Constants.JSON_PHOTOS);
+            JSONArray photosJsonArray = photosJson.getJSONArray(Constants.JSON_PHOTOS);
+            for (int i = 0; i < photosJsonArray.length(); i++) {
+                photos.add(parseMediaJson(photosJsonArray.getJSONObject(i), "photo"));
+            }
+            JSONArray thumbnailJsonArray = photosJson.getJSONArray(Constants.JSON_THUMBNAILS);
+            for (int i = 0; i < thumbnailJsonArray.length(); i++) {
+                photos.add(parseMediaJson(thumbnailJsonArray.getJSONObject(i), "thumbnail"));
+            }
+
+            JSONArray unitsJsonArray = jsonObject.getJSONArray(Constants.JSON_UNITS);
+            for (int i = 0; i < unitsJsonArray.length(); i++) {
+                units.add(parseUnitJson(unitsJsonArray.getJSONObject(i)));
+            }
+
+            return new Listing(listingId, listingUrl, sourceLocale,
+                    sourceLocaleName, description, headline,
+                    features, location, sites, photos, units);
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON data for Listing type with error: " + e.getMessage());
+        } catch (MalformedURLException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Malformed URL in JSON data for a photo");
         }
     }
 }
