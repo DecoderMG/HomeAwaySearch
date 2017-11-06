@@ -9,6 +9,7 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
+import com.dakota.gallimore.homeawaysearch.DataClasses.Site;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Unit;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 
@@ -260,6 +261,7 @@ public class JsonUtils {
             if (!imageType.equals(Constants.JSON_PHOTO_IMAGE_TYPE)) {
                 caption = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE).getString(Constants.JSON_CAPTION);
                 unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
+                jsonObject = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE);
             } else {
                 caption = jsonObject.getString(Constants.JSON_CAPTION);
             }
@@ -276,6 +278,20 @@ public class JsonUtils {
         } catch (MalformedURLException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Unable to parse image URI");
+        }
+    }
+
+    public static Site parseSiteJson(JSONObject jsonObject) throws JSONException {
+        String href = "";
+        String rel = "";
+
+        try {
+            href = jsonObject.getString(Constants.JSON_HREF);
+            rel = jsonObject.getString(Constants.JSON_REL);
+            return new Site(href, rel);
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON date for Site type");
         }
     }
 }
