@@ -67,4 +67,10 @@ public class Constants {
 
     public static final String JSON_HREF = "href";
     public static final String JSON_REL = "rel";
+
+    public static final String JSON_LATITUDE = "lat";
+    public static final String JSON_LONGITUDE = "lng";
+    public static final String JSON_CITY = "city";
+    public static final String JSON_STATE = "state";
+    public static final String JSON_COUNTRY = "country";
 }
