@@ -2,6 +2,8 @@ package com.dakota.gallimore.homeawaysearch.DataClasses;
 
 import android.util.Log;
 
+import com.dakota.gallimore.homeawaysearch.Constants;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -183,7 +185,7 @@ public class Unit {
             return this.features.get(i);
         }
 
-        Log.d("Unit Class: ", "Error: attempting to get feature outside of Feature array");
+        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to get feature outside of Feature array");
         return null;
     }
 
@@ -195,7 +197,7 @@ public class Unit {
         if (this.features.contains(feature)) {
             this.features.remove(feature);
         } else {
-            Log.d("Unit Class: ", "Feature not associated with Unit");
+            Log.d(Constants.UNIT_CLASS_LOG_TAG, "Feature not associated with Unit");
         }
     }
 
@@ -226,7 +228,7 @@ public class Unit {
         if (i < this.reviews.size()) {
             return this.reviews.get(i);
         }
-        Log.d("Unit: ", "Error: Attempting to get review out of review index");
+        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: Attempting to get review out of review index");
         return null;
     }
 
@@ -277,7 +279,7 @@ public class Unit {
         if (i < this.rooms.size()) {
             return this.rooms.get(i);
         }
-        Log.d("Unit: ", "Error: attempting to remove room outside of array index");
+        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to remove room outside of array index");
         return null;
     }
 
@@ -307,7 +309,7 @@ public class Unit {
         if (i < this.ratePeriods.size()) {
             return this.ratePeriods.get(i);
         }
-        Log.d("Unit: ", "Error: attempting to remove rate period outside of array index");
+        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to remove rate period outside of array index");
         return null;
     }
 
@@ -363,11 +365,11 @@ public class Unit {
         return averageReviewScore;
     }
 
-    public void setAverageReviewScore(float averageReviewScore) {
+    public void setAverageReviewScore(double averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
-    public void setAverageReviewScore(double averageReviewScore) {
+    public void setAverageReviewScore(float averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
