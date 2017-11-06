@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by galli_000 on 11/6/2017.
- * Class containing all information relating to a HomeAway Listing
+ * Class containing all information relating to a HomeAway listing
  */
 
 public class Listing {

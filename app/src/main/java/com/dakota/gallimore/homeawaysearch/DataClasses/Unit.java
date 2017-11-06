@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by galli_000 on 11/3/2017.
+ * Class containing all information relating to a Unit of a Homeaway listing
  */
 
 public class Unit {
@@ -365,11 +366,11 @@ public class Unit {
         return averageReviewScore;
     }
 
-    public void setAverageReviewScore(double averageReviewScore) {
+    public void setAverageReviewScore(float averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
-    public void setAverageReviewScore(float averageReviewScore) {
+    public void setAverageReviewScore(double averageReviewScore) {
         this.averageReviewScore = averageReviewScore;
     }
 
