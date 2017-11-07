@@ -8,6 +8,7 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
+import com.dakota.gallimore.homeawaysearch.DataClasses.PriceQuote;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
@@ -457,6 +458,53 @@ public class JsonUtils {
         } catch (MalformedURLException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Malformed URL in JSON data for a photo");
+        }
+    }
+
+    public static PriceQuote parsePriceQuoteJson(JSONObject jsonObject) throws JSONException {
+        String currencyUnits = "USD";
+        double amount = 0;
+        double other = 0;
+        double tax = 0;
+        double averageNightly = 0;
+        double fullyLoadedPriceQuote = 0;
+        double rent = 0;
+        double fees = 0;
+        double travelersFee = 0;
+
+        try {
+            if (!jsonObject.isNull(Constants.JSON_CURRENCY_UNITS)) {
+                currencyUnits = jsonObject.getString(Constants.JSON_CURRENCY_UNITS);
+            }
+            if (!jsonObject.isNull(Constants.JSON_AMOUNT)) {
+                amount = jsonObject.getDouble(Constants.JSON_AMOUNT);
+            }
+            if (!jsonObject.isNull(Constants.JSON_OTHER)) {
+                other = jsonObject.getDouble(Constants.JSON_OTHER);
+            }
+            if (!jsonObject.isNull(Constants.JSON_TAX)) {
+                tax = jsonObject.getDouble(Constants.JSON_TAX);
+            }
+            if (!jsonObject.isNull(Constants.JSON_AVERAGE_NIGHTLY)) {
+                averageNightly = jsonObject.getDouble(Constants.JSON_AVERAGE_NIGHTLY);
+            }
+            if (!jsonObject.isNull(Constants.JSON_FULLY_LOADED_PRICE_QUOTE)) {
+                fullyLoadedPriceQuote = jsonObject.getDouble(Constants.JSON_FULLY_LOADED_PRICE_QUOTE);
+            }
+            if (!jsonObject.isNull(Constants.JSON_RENT)) {
+                rent = jsonObject.getDouble(Constants.JSON_RENT);
+            }
+            if (!jsonObject.isNull(Constants.JSON_FEES)) {
+                fees = jsonObject.getDouble(Constants.JSON_FEES);
+            }
+            if (!jsonObject.isNull(Constants.JSON_TRAVELER_FEE)) {
+                travelersFee = jsonObject.getDouble(Constants.JSON_TRAVELER_FEE);
+            }
+            return new PriceQuote(currencyUnits, amount, other, tax, averageNightly, fullyLoadedPriceQuote,
+                    rent, fees, travelersFee);
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON data for PriceQuote type with error: " + e.getMessage());
         }
     }
 }
