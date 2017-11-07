@@ -87,4 +87,13 @@ public class Constants {
     public static final String JSON_PHOTOS = "photos";
     public static final String JSON_THUMBNAILS = "thumbnails";
     public static final String JSON_UNITS = "units";
+
+    public static final String JSON_CURRENCY_UNITS = "currencyUnits";
+    public static final String JSON_OTHER = "other";
+    public static final String JSON_TAX = "tax";
+    public static final String JSON_AVERAGE_NIGHTLY = "averageNightly";
+    public static final String JSON_FULLY_LOADED_PRICE_QUOTE = "fullyLoadedPriceQuote";
+    public static final String JSON_RENT = "rent";
+    public static final String JSON_FEES = "fees";
+    public static final String JSON_TRAVELER_FEE = "travelerFee";
 }

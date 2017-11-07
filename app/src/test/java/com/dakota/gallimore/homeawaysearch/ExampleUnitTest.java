@@ -5,6 +5,7 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.Feature;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
+import com.dakota.gallimore.homeawaysearch.DataClasses.PriceQuote;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
@@ -835,5 +836,33 @@ public class ExampleUnitTest {
         assertEquals("7/10", listing.getUnit(0).getReview(0).getHeadline());
 
         assertEquals(755, listing.getUnit(0).getRatePeriod(1).getWeeklyRate(), 0);
+    }
+
+    @Test
+    public void JsonPriceQuoteTest() throws Exception {
+        String priceQuoteJson = "{  " +
+                "            \"currencyUnits\":\"USD\"," +
+                "            \"amount\":null," +
+                "            \"other\":15.2," +
+                "            \"tax\":null," +
+                "            \"averageNightly\":139," +
+                "            \"fullyLoadedPriceQuote\":null," +
+                "            \"rent\":null," +
+                "            \"fees\":0.59," +
+                "            \"travelerFee\":null" +
+                "         }";
+
+        JSONObject jsonObject = new JSONObject(priceQuoteJson);
+        PriceQuote priceQuote = JsonUtils.parsePriceQuoteJson(jsonObject);
+
+        assertEquals("USD", priceQuote.getCurrencyUnits());
+        assertEquals(0, priceQuote.getAmount(), 0);
+        assertEquals(15.2, priceQuote.getOther(), 0);
+        assertEquals(0, priceQuote.getTax(), 0);
+        assertEquals(139, priceQuote.getAverageNightly(), 0);
+        assertEquals(0, priceQuote.getFullyLoadedPriceQuote(), 0);
+        assertEquals(0, priceQuote.getRent(), 0);
+        assertEquals(0.59, priceQuote.getFees(), 0);
+        assertEquals(0, priceQuote.getTravelerFee(), 0);
     }
 }
