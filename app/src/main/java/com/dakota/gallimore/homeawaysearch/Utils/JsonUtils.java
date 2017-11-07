@@ -35,10 +35,10 @@ public class JsonUtils {
 
     /**
      * Method to parse HomeAway User Json into the User class variable.
-     * NOTE: Throws exception to be handled on UI thread.
      *
      * @param object - Json object returned from HomeAway servers.
      * @return User object containing json data
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static User parseUserJson(JSONObject object) throws JSONException {
         String firstName = "";
@@ -85,6 +85,13 @@ public class JsonUtils {
         return new User(firstName, lastName, email, allAccounts, id, homeSite, 0);
     }
 
+    /**
+     * Parses HomeAway Amenity JSON into an Amenity data class.
+     *
+     * @param jsonObject - JSONObject containing a single HomeAway Amenity.
+     * @return - New Amenity data class populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Amenities parseAmenityJson(JSONObject jsonObject) throws JSONException {
         int count = 0;
         String category = "";
@@ -103,6 +110,15 @@ public class JsonUtils {
         return new Amenities(count, category, description, localizedName);
     }
 
+    /**
+     * Parses HomeAway Room JSON into a Room data class. Will also call the parseAmenityJson method if
+     * room has associated amenities.
+     *
+     * @param jsonObject - JSONObject containing a single HomeAway Room.
+     * @param roomType   - Type of room to be parsed. (ie. Bathroom, Bedroom, etc.)
+     * @return - New Room object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Room parseRoomJson(JSONObject jsonObject, String roomType) throws JSONException {
         ArrayList<Amenities> amenities = new ArrayList<>();
         String roomName = "";
@@ -124,6 +140,12 @@ public class JsonUtils {
         return new Room(amenities, roomName, roomSubType, roomType);
     }
 
+    /**
+     * Parses HomeAway Review JSON into a Review object.
+     * @param jsonObject - JSONObject containing a single HomeAway Review.
+     * @return - New Review object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Review parseReviewJson(JSONObject jsonObject) throws JSONException {
         String reviewDate = "";
         String reviewerName = "";
@@ -150,6 +172,12 @@ public class JsonUtils {
         return new Review(reviewDate, reviewerName, body, headline, helpfulCount, unhelpfulCount, reviewLocale);
     }
 
+    /**
+     * Parses HomeAway Feature JSON into a Feature object.
+     * @param jsonObject - JSONObject containing a single HomeAway Feature.
+     * @return - New Feature object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Feature parseFeatureJson(JSONObject jsonObject) throws JSONException {
         int count;
         String category;
@@ -169,6 +197,12 @@ public class JsonUtils {
         return new Feature(count, category, description, localizedName);
     }
 
+    /**
+     * Parses HomeAway RatePeriod JSON into a RatePeriod object.
+     * @param jsonObject - JSONObject containing a single HomeAway RatePeriod.
+     * @return - New RatePeriod object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static RatePeriod parseRatePeriodJson(JSONObject jsonObject) throws JSONException {
         Date arrivalDate = new Date();
         Date leaveDate = new Date();
@@ -193,6 +227,13 @@ public class JsonUtils {
         return new RatePeriod(arrivalDate, leaveDate, minimumStay, weeklyRate, currency);
     }
 
+    /**
+     * Parses HomeAway Unit JSON into a Unit object. Will call parseRoomJson, parseFeatureJson, parseReviewJson, and
+     * parseRatePeriodJson methods for any and all associated Rooms, Features, Reviews, and Rate Periods for the Unit.
+     * @param jsonObject - JSONObject containing a single HomeAway Unit.
+     * @return - New Unit object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Unit parseUnitJson(JSONObject jsonObject) throws JSONException {
         int unitNumber = 0;
         int unitArea = 0;
@@ -252,6 +293,14 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Parses HomeAway Listing Photos into a ListingMedia object.
+     * @param jsonObject - JSONObject containing a single HomeAway photo object.
+     * @param imageType - Type of JSONObject passed (ie. Object for thumbnail, photo, etc.).
+     * @return - New ListingMedia object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     * @throws MalformedURLException - When provided photo URLs are malformed.
+     */
     public static ListingMedia parseMediaJson(JSONObject jsonObject, String imageType) throws JSONException, MalformedURLException {
         String caption = "";
         int height = 0;
@@ -285,6 +334,12 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Parses HomeAway Site JSON into a Site object.
+     * @param jsonObject - JSONObject containing a single HomeAway Site.
+     * @return - New Site object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Site parseSiteJson(JSONObject jsonObject) throws JSONException {
         String href = "";
         String rel = "";
@@ -299,6 +354,12 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Parses HomeAway Location JSON into a Location object.
+     * @param jsonObject - JSONObject containing a single HomeAway Location.
+     * @return - New Location object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Location parseLocationJson(JSONObject jsonObject) throws JSONException {
         double lat = 0;
         double lng = 0;
@@ -329,6 +390,14 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Parses HomeAway Listing JSON into a Listing object. Will call Will call parseFeatureJson, parseLocationJson,
+     * parseSiteJson, parseMediaJson, and parseUnitJson methods for any and all associated Features, Locations,
+     * Sites, Media, and Units for the Listing.
+     * @param jsonObject - JSONObject containing a single HomeAway Listing.
+     * @return - New Listing object populated with provided JSON data.
+     * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
+     */
     public static Listing parseListingJson(JSONObject jsonObject) throws JSONException {
         String listingId = "";
         String listingUrl = "";
