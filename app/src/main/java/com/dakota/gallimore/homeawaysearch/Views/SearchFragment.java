@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 import com.dakota.gallimore.homeawaysearch.R;
@@ -49,6 +50,7 @@ public class SearchFragment extends Fragment {
     AuthState authState;
     AuthorizationServiceConfiguration serviceConfig;
     JSONObject jsonReply;
+    EditText ed;
 
     // TODO: Rename and change types of parameters, may not need parameters
     private String mParam1;
@@ -91,6 +93,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        ed = rootView.findViewById(R.id.search);
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -144,7 +147,7 @@ public class SearchFragment extends Fragment {
                                     return;
                                 }
 
-                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/myListings", authState.getAccessToken(), new NetworkCallback() {
+                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search?q=austin&minPrice=100.0&availabilityEnd=2016-05-04&availabilityStart=2016-04-22&pageSize=1&locale=en&refine=Sleeps:1", authState.getAccessToken(), new NetworkCallback() {
                                     @Override
                                     public void onJsonObjectReturn(JSONObject jsonObject) {
 
@@ -165,7 +168,7 @@ public class SearchFragment extends Fragment {
             authState = AuthUtils.readAuthState(getActivity());
             //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
 
-            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/me", authState.getAccessToken(), new NetworkCallback() {
+            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/listing?id=v1183471&q=DETAILS&q=PHOTOS&q=LOCATION", authState.getAccessToken(), new NetworkCallback() {
                 @Override
                 public void onJsonObjectReturn(JSONObject jsonObject) {
                     jsonReply = jsonObject;
@@ -175,6 +178,7 @@ public class SearchFragment extends Fragment {
                             public void run() {
                                 User user = null;
                                 try {
+                                    ed.setText(jsonReply.toString());
                                     user = JsonUtils.parseUserJson(jsonReply);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
