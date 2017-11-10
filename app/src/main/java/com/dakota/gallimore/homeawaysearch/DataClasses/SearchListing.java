@@ -1,14 +1,16 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
-import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by galli_000 on 11/7/2017.
  */
 
 public class SearchListing {
+    ArrayList<PriceRange> priceRanges;
     private String headline;
     private String accommodations;
     private Location location;
@@ -17,18 +19,12 @@ public class SearchListing {
     private URL detailsUrl;
     private boolean bookWithConfidence;
     private String listingId;
-    private Bitmap thumbnail;
+    private String thumbnailUrl;
     private String description;
     private int reviewCount;
     private String listingSource;
     private String listingUrl;
     private double reviewAverage;
-
-    private double priceRangeTo;
-    private double priceRangeFrom;
-    private String priceRangePeriodType;
-    private String priceRangeCurrency;
-
     private PriceQuote priceQuote;
 
     public SearchListing() {
@@ -37,7 +33,7 @@ public class SearchListing {
     public SearchListing(String headline, String accommodations, Location location,
                          double bathrooms, double bedrooms,
                          URL detailsUrl, boolean bookWithConfidence,
-                         String listingId, Bitmap thumbnail, String description,
+                         String listingId, String thumbnailUrl, String description,
                          int reviewCount, String listingSource, String listingUrl,
                          double reviewAverage, PriceQuote priceQuote) {
         this.headline = headline;
@@ -48,12 +44,36 @@ public class SearchListing {
         this.detailsUrl = detailsUrl;
         this.bookWithConfidence = bookWithConfidence;
         this.listingId = listingId;
-        this.thumbnail = thumbnail;
+        this.thumbnailUrl = thumbnailUrl;
         this.description = description;
         this.reviewCount = reviewCount;
         this.listingSource = listingSource;
         this.listingUrl = listingUrl;
         this.reviewAverage = reviewAverage;
+        this.priceQuote = priceQuote;
+    }
+
+    public SearchListing(String headline, String accommodations, Location location,
+                         double bathrooms, double bedrooms, URL detailsUrl,
+                         boolean bookWithConfidence, String listingId, String thumbnailUrl,
+                         String description, int reviewCount, String listingSource,
+                         String listingUrl, double reviewAverage, ArrayList<PriceRange> priceRanges,
+                         PriceQuote priceQuote) {
+        this.headline = headline;
+        this.accommodations = accommodations;
+        this.location = location;
+        this.bathrooms = bathrooms;
+        this.bedrooms = bedrooms;
+        this.detailsUrl = detailsUrl;
+        this.bookWithConfidence = bookWithConfidence;
+        this.listingId = listingId;
+        this.thumbnailUrl = thumbnailUrl;
+        this.description = description;
+        this.reviewCount = reviewCount;
+        this.listingSource = listingSource;
+        this.listingUrl = listingUrl;
+        this.reviewAverage = reviewAverage;
+        this.priceRanges = priceRanges;
         this.priceQuote = priceQuote;
     }
 
@@ -121,12 +141,12 @@ public class SearchListing {
         this.listingId = listingId;
     }
 
-    public Bitmap getThumbnail() {
-        return thumbnail;
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 
-    public void setThumbnail(Bitmap thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public String getDescription() {
@@ -169,36 +189,37 @@ public class SearchListing {
         this.reviewAverage = reviewAverage;
     }
 
-    public double getPriceRangeTo() {
-        return priceRangeTo;
+    public ArrayList<PriceRange> getPriceRanges() {
+        return priceRanges;
     }
 
-    public void setPriceRangeTo(double priceRangeTo) {
-        this.priceRangeTo = priceRangeTo;
+    public void setPriceRanges(ArrayList<PriceRange> priceRanges) {
+        this.priceRanges = priceRanges;
     }
 
-    public double getPriceRangeFrom() {
-        return priceRangeFrom;
+    public void addPriceRange(PriceRange priceRange) {
+        if (priceRange != null) {
+            priceRanges.add(priceRange);
+        } else {
+            Log.d("Search Listing Log: ", "Unable to add null Price Range to Search Listing");
+        }
     }
 
-    public void setPriceRangeFrom(double priceRangeFrom) {
-        this.priceRangeFrom = priceRangeFrom;
+    public void removePriceRange(PriceRange priceRange) {
+        if (priceRange != null && priceRanges.contains(priceRange)) {
+            priceRanges.remove(priceRange);
+        } else {
+            Log.d("Search Listing Log: ", "Price range is either null or not associated with Search Listing");
+        }
     }
 
-    public String getPriceRangePeriodType() {
-        return priceRangePeriodType;
-    }
-
-    public void setPriceRangePeriodType(String priceRangePeriodType) {
-        this.priceRangePeriodType = priceRangePeriodType;
-    }
-
-    public String getPriceRangeCurrency() {
-        return priceRangeCurrency;
-    }
-
-    public void setPriceRangeCurrency(String priceRangeCurrency) {
-        this.priceRangeCurrency = priceRangeCurrency;
+    public PriceRange getPriceRange(int i) {
+        if (i < priceRanges.size()) {
+            return priceRanges.get(i);
+        } else {
+            Log.d("Search Listing Log: ", "Error: Attempting to get price range outside the index of the Search Listing Price Ranges");
+            return null;
+        }
     }
 
     public PriceQuote getPriceQuote() {
