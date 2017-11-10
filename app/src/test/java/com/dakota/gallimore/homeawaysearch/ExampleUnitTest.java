@@ -6,9 +6,11 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.PriceQuote;
+import com.dakota.gallimore.homeawaysearch.DataClasses.PriceRange;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
+import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Site;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Unit;
 import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
@@ -864,5 +866,96 @@ public class ExampleUnitTest {
         assertEquals(0, priceQuote.getRent(), 0);
         assertEquals(0.59, priceQuote.getFees(), 0);
         assertEquals(0, priceQuote.getTravelerFee(), 0);
+    }
+
+    @Test
+    public void JsonPriceRangeTest() throws Exception {
+        String priceRangeJson = "{  " +
+                "               \"to\":140," +
+                "               \"currencyUnits\":\"USD\"," +
+                "               \"periodType\":\"NIGHTLY-WEEKDAY\"," +
+                "               \"from\":145.3" +
+                "            }";
+        JSONObject jsonObject = new JSONObject(priceRangeJson);
+        PriceRange priceRange = JsonUtils.parsePriceRangeJson(jsonObject);
+
+        assertEquals(140, priceRange.getToPrice(), 0);
+        assertEquals("USD", priceRange.getCurrencyUnits());
+        assertEquals("NIGHTLY-WEEKDAY", priceRange.getPeriodType());
+        assertEquals(145.3, priceRange.getFromPrice(), 0);
+    }
+
+    @Test
+    public void JsonSearchListingTest() throws Exception {
+        String searchListingJson = "{   " +
+                "         \"minStayRange\":{   " +
+                "            \"minStayHigh\":1, " +
+                "            \"minStayLow\":1 " +
+                "         }, " +
+                "         \"headline\":\"Charming & Comfortable Hyde Park Guest House\", " +
+                "         \"priceRanges\":[   " +
+                "            {   " +
+                "               \"to\":140, " +
+                "               \"currencyUnits\":\"USD\", " +
+                "               \"periodType\":\"NIGHTLY-WEEKDAY\", " +
+                "               \"from\":140 " +
+                "            } " +
+                "         ], " +
+                "         \"accommodations\":\"1 BR, 1.0BA, Sleeps 2\", " +
+                "         \"location\":{   " +
+                "            \"state\":\"TX\", " +
+                "            \"lng\":-97.73258226, " +
+                "            \"lat\":30.29954106, " +
+                "            \"country\":\"US\", " +
+                "            \"city\":\"Austin\" " +
+                "         }, " +
+                "         \"bathrooms\":1, " +
+                "         \"detailsUrl\":\"https:\\/\\/ws.homeaway.com\\/public\\/listing?id=v1183471\", " +
+                "         \"bookWithConfidence\":true, " +
+                "         \"regionPath\":\"Texas Hill Country > Austin Guest_house #v1183471\", " +
+                "         \"bedrooms\":1, " +
+                "         \"listingId\":\"v1183471\", " +
+                "         \"thumbnail\":{   " +
+                "            \"secureUri\":\"https:\\/\\/imagesus-ssl.homeaway.com\\/mda01\\/18844b11-187c-4a8a-ad63-006d87fca233.1.1\", " +
+                "            \"imageSize\":\"SMALL\", " +
+                "            \"height\":100, " +
+                "            \"uri\":\"http:\\/\\/imagesus.homeaway.com\\/mda01\\/18844b11-187c-4a8a-ad63-006d87fca233.1.1\", " +
+                "            \"width\":133 " +
+                "         }, " +
+                "         \"priceQuote\":{   " +
+                "            \"currencyUnits\":\"USD\", " +
+                "            \"amount\":null, " +
+                "            \"other\":null, " +
+                "            \"tax\":null, " +
+                "            \"averageNightly\":139, " +
+                "            \"fullyLoadedPriceQuote\":null, " +
+                "            \"rent\":null, " +
+                "            \"fees\":null, " +
+                "            \"travelerFee\":null " +
+                "         }, " +
+                "         \"description\":\"Charming & perfectly located backyard bungalow for your next visit to beautiful Austin, TX! Located just off 38th St. in renown Hyde Park and a hair north of Univ. of Texas (just over 1 mi. from Darrell Royal Memorial Stadium for football games), ...\", " +
+                "         \"reviewCount\":0, " +
+                "         \"listingSource\":\"vrbo\", " +
+                "         \"listingUrl\":\"https:\\/\\/www.vrbo.com\\/1183471\", " +
+                "         \"reviewAverage\":0 " +
+                "      }";
+        JSONObject jsonObject = new JSONObject(searchListingJson);
+        SearchListing searchListing = JsonUtils.parseSearchListingJson(jsonObject);
+
+        assertEquals("Charming & Comfortable Hyde Park Guest House", searchListing.getHeadline());
+        assertEquals("1 BR, 1.0BA, Sleeps 2", searchListing.getAccommodations());
+        assertEquals(30.29954106, searchListing.getLocation().getLatitude(), 0);
+        assertEquals(1, searchListing.getBathrooms(), 0);
+        assertEquals(1, searchListing.getBedrooms(), 0);
+        assertEquals(new URL("https://ws.homeaway.com/public/listing?id=v1183471"), searchListing.getDetailsUrl());
+        assertTrue(searchListing.isBookWithConfidence());
+        assertEquals("v1183471", searchListing.getListingId());
+        assertEquals("Charming & perfectly located backyard bungalow for your next visit to beautiful Austin, TX! Located just off 38th St. in renown Hyde Park and a hair north of Univ. of Texas (just over 1 mi. from Darrell Royal Memorial Stadium for football games), ...", searchListing.getDescription());
+        assertEquals(0, searchListing.getReviewCount(), 0);
+        assertEquals("vrbo", searchListing.getListingSource());
+        assertEquals("https://www.vrbo.com/1183471", searchListing.getListingUrl());
+        assertEquals(0, searchListing.getReviewAverage(), 0);
+        assertEquals("http://imagesus.homeaway.com/mda01/18844b11-187c-4a8a-ad63-006d87fca233.1.1", searchListing.getThumbnailUrl());
+        assertEquals(140, searchListing.getPriceRange(0).getToPrice(), 0);
     }
 }
