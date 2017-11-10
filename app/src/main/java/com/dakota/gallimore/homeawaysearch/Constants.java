@@ -96,4 +96,18 @@ public class Constants {
     public static final String JSON_RENT = "rent";
     public static final String JSON_FEES = "fees";
     public static final String JSON_TRAVELER_FEE = "travelerFee";
+
+    public static final String JSON_ACCOMMODATIONS = "accommodations";
+    public static final String JSON_DETAILS_URL = "detailsUrl";
+    public static final String JSON_BOOK_WITH_CONFIDENCE = "bookWithConfidence";
+    public static final String JSON_REVIEW_COUNT = "reviewCount";
+    public static final String JSON_LISTING_SOURCE = "listingSource";
+    public static final String JSON_LISTING_SOURCE_URL = "listingUrl";
+    public static final String JSON_REVIEW_AVERAGE = "reviewAverage";
+
+    public static final String JSON_TO = "to";
+    public static final String JSON_PERIOD_TYPE = "periodType";
+    public static final String JSON_FROM = "from";
+
+    public static final String JSON_PRICE_QUOTE = "priceQuote";
 }
