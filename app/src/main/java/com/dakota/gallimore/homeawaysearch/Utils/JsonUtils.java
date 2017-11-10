@@ -9,9 +9,11 @@ import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
 import com.dakota.gallimore.homeawaysearch.DataClasses.PriceQuote;
+import com.dakota.gallimore.homeawaysearch.DataClasses.PriceRange;
 import com.dakota.gallimore.homeawaysearch.DataClasses.RatePeriod;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Review;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Room;
+import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Site;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Unit;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
@@ -505,6 +507,90 @@ public class JsonUtils {
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid JSON data for PriceQuote type with error: " + e.getMessage());
+        }
+    }
+
+    public static PriceRange parsePriceRangeJson(JSONObject jsonObject) throws JSONException {
+        double to = 0;
+        String currencyUnits = "";
+        String periodType = "";
+        double from = 0;
+
+        try {
+            if (!jsonObject.isNull(Constants.JSON_TO)) {
+                to = jsonObject.getDouble(Constants.JSON_TO);
+            }
+            if (!jsonObject.isNull(Constants.JSON_CURRENCY_UNITS)) {
+                currencyUnits = jsonObject.getString(Constants.JSON_CURRENCY_UNITS);
+            }
+            if (!jsonObject.isNull(Constants.JSON_PERIOD_TYPE)) {
+                periodType = jsonObject.getString(Constants.JSON_PERIOD_TYPE);
+            }
+            if (!jsonObject.isNull(Constants.JSON_FROM)) {
+                from = jsonObject.getDouble(Constants.JSON_FROM);
+            }
+
+            return new PriceRange(to, currencyUnits, periodType, from);
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON data for Listing type with error: " + e.getMessage());
+        }
+    }
+
+    public static SearchListing parseSearchListingJson(JSONObject jsonObject) throws JSONException, MalformedURLException {
+        String headline = "";
+        String accommodations = "";
+        Location location = new Location();
+        double bathrooms = 0;
+        double bedrooms = 0;
+        URL detailsUrl = null;
+        boolean bookWithConfidence = false;
+        String listingId = "";
+        String thumbnailUrl = "";
+        String description = "";
+        int reviewCount = 0;
+        String listingSource = "";
+        String listingUrl = "";
+        double reviewAverage = 0;
+
+        ArrayList<PriceRange> priceRanges = new ArrayList<>();
+
+        PriceQuote priceQuote;
+
+        try {
+            headline = jsonObject.getString(Constants.JSON_HEADLINE);
+            accommodations = jsonObject.getString(Constants.JSON_ACCOMMODATIONS);
+            location = parseLocationJson(jsonObject.getJSONObject(Constants.JSON_LOCATION));
+            bathrooms = jsonObject.getDouble(Constants.JSON_ROOM_BATHROOMS);
+            bedrooms = jsonObject.getDouble(Constants.JSON_ROOM_BEDROOMS);
+            detailsUrl = new URL(jsonObject.getString(Constants.JSON_DETAILS_URL));
+            bookWithConfidence = jsonObject.getBoolean(Constants.JSON_BOOK_WITH_CONFIDENCE);
+            listingId = jsonObject.getString(Constants.JSON_LISTING_ID);
+            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
+            reviewCount = jsonObject.getInt(Constants.JSON_REVIEW_COUNT);
+            listingSource = jsonObject.getString(Constants.JSON_LISTING_SOURCE);
+            listingUrl = jsonObject.getString(Constants.JSON_LISTING_SOURCE_URL);
+            reviewAverage = jsonObject.getDouble(Constants.JSON_REVIEW_AVERAGE);
+
+            JSONObject thumbnailObject = jsonObject.getJSONObject("thumbnail");
+            thumbnailUrl = thumbnailObject.getString(Constants.JSON_URL);
+
+            JSONArray priceRangeJsonArray = jsonObject.getJSONArray("priceRanges");
+            for (int i = 0; i < priceRangeJsonArray.length(); i++) {
+                priceRanges.add(parsePriceRangeJson(priceRangeJsonArray.getJSONObject(i)));
+            }
+
+            priceQuote = parsePriceQuoteJson(jsonObject.getJSONObject(Constants.JSON_PRICE_QUOTE));
+
+            return new SearchListing(headline, accommodations, location, bathrooms, bedrooms, detailsUrl, bookWithConfidence, listingId, thumbnailUrl,
+                    description, reviewCount, listingSource, listingUrl, reviewAverage, priceRanges, priceQuote);
+
+        } catch (JSONException e) {
+            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
+            throw new JSONException("Invalid JSON data for SearchListing type with error: " + e.getMessage());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            throw new MalformedURLException("Malformed URL in the detailsURL JSON reply");
         }
     }
 }
