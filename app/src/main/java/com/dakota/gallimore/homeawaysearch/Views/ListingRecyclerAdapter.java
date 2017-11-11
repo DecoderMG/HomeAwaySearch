@@ -8,25 +8,37 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.R;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by galli_000 on 11/7/2017.
+ * Recycler Adapter responsible for handling returned search results from HomeAway.
  */
 
 public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecyclerAdapter.ListingViewHolder> {
 
     Context mContext;
-    List<SearchListing> data = Collections.emptyList();
+    ArrayList<SearchListing> data = new ArrayList<>();
+    String accessToken;
 
-    public ListingRecyclerAdapter(Context context, List<SearchListing> data) {
+    public ListingRecyclerAdapter(Context context, ArrayList<SearchListing> data) {
         super();
         mContext = context;
         this.data = data;
+        accessToken = "";
+    }
+
+    public ListingRecyclerAdapter(Context context, ArrayList<SearchListing> data, String accessToken) {
+        super();
+        mContext = context;
+        this.data = data;
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -44,11 +56,18 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
         holder.description.setText(searchListing.getDescription());
         holder.bathrooms.setText(searchListing.getBathrooms() + " Bathroom(s)");
         holder.bedrooms.setText(searchListing.getBedrooms() + " Bedroom(s)");
-        holder.listingImage.setImageBitmap(searchListing.getThumbnail());
         holder.roomRate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
-        holder.roomRatePeriod.setText(searchListing.getPriceRangePeriodType());
-        holder.location.setText(searchListing.getLocation().getCity() + ", " + searchListing.getLocation().getState() + " " + searchListing.getLocation().getCountry());
 
+        if (accessToken != "") {
+            GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnailUrl(), new LazyHeaders.Builder()
+                    .addHeader("Authorization", "Bearer " + accessToken).build());
+
+            Glide.with(mContext).load(glideUrl).into(holder.listingImage);
+        } else {
+            Glide.with(mContext).load(searchListing.getThumbnailUrl()).into(holder.listingImage);
+        }
+        holder.roomRatePeriod.setText(searchListing.getPriceRange(0).getPeriodType());
+        holder.location.setText(searchListing.getLocation().getCity() + ", " + searchListing.getLocation().getState() + " " + searchListing.getLocation().getCountry());
     }
 
     @Override
