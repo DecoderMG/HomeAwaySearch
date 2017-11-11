@@ -5,12 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
 import com.dakota.gallimore.homeawaysearch.R;
 import com.dakota.gallimore.homeawaysearch.Utils.AuthUtils;
@@ -28,8 +31,12 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,11 +58,10 @@ public class SearchFragment extends Fragment {
     AuthorizationServiceConfiguration serviceConfig;
     JSONObject jsonReply;
     EditText ed;
-
+    RecyclerView mRecyclerView;
     // TODO: Rename and change types of parameters, may not need parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public SearchFragment() {
@@ -70,7 +76,6 @@ public class SearchFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SearchFragment.
      */
-    // TODO: Rename and change types and number of parameters, again may not need parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -94,6 +99,26 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         ed = rootView.findViewById(R.id.search);
+        mRecyclerView = rootView.findViewById(R.id.listing_search_results_recyclerview);
+        LinearLayoutManager linearLayoutManager =
+                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setAdapter(new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        });
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -108,14 +133,10 @@ public class SearchFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        serviceConfig =
-                new AuthorizationServiceConfiguration(
-                        Uri.parse("https://ws.homeaway.com/oauth/authorize"), // authorization endpoint
-                        Uri.parse("https://ws.homeaway.com/oauth/token")); // token endpoint
-
-
+        serviceConfig = AuthUtils.getHomeAwayAuthorizationServiceConfiguration();
         AuthorizationResponse resp = AuthorizationResponse.fromIntent(getActivity().getIntent());
         AuthorizationException ex = AuthorizationException.fromIntent(getActivity().getIntent());
+
         if (resp != null) {
             // authorization completed
             authState = new AuthState(serviceConfig);
@@ -150,7 +171,7 @@ public class SearchFragment extends Fragment {
                                 NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search?q=austin&minPrice=100.0&availabilityEnd=2016-05-04&availabilityStart=2016-04-22&pageSize=1&locale=en&refine=Sleeps:1", authState.getAccessToken(), new NetworkCallback() {
                                     @Override
                                     public void onJsonObjectReturn(JSONObject jsonObject) {
-
+                                        displayJsonListings(jsonObject);
                                     }
                                 });
 
@@ -168,43 +189,10 @@ public class SearchFragment extends Fragment {
             authState = AuthUtils.readAuthState(getActivity());
             //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
 
-            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/listing?id=v1183471&q=DETAILS&q=PHOTOS&q=LOCATION", authState.getAccessToken(), new NetworkCallback() {
+            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search", authState.getAccessToken(), new NetworkCallback() {
                 @Override
                 public void onJsonObjectReturn(JSONObject jsonObject) {
-                    jsonReply = jsonObject;
-                    if (jsonReply != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                User user = null;
-                                try {
-                                    ed.setText(jsonReply.toString());
-                                    user = JsonUtils.parseUserJson(jsonReply);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                StringBuilder userBuffer = new StringBuilder();
-                                userBuffer.append("User Id: " + user.getId() + "\nName: " + user.getFirstName() + " " + user.getLastName() + "\nEmail: " + user.getEmail()
-                                        + "\nAccounts: ");
-                                for (String account : user.getAccountTypes()) {
-                                    userBuffer.append(account);
-                                    userBuffer.append(" | ");
-                                }
-
-                                userBuffer.append("\n\n" + jsonReply.toString());
-                                Log.d("Search Frag: ", user.getEmail());
-                                //tv.setText(accountsBuffer.toString());
-                            }
-                        });
-
-                    } else {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //tv.setText("empty json returned");
-                            }
-                        });
-                    }
+                    displayJsonListings(jsonObject);
                 }
             });
 
@@ -269,6 +257,57 @@ public class SearchFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void displayJsonListings(JSONObject jsonObject) {
+        jsonReply = jsonObject;
+        if (jsonReply != null) {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    User user = null;
+                    try {
+                        ArrayList<SearchListing> searchListings = new ArrayList<>();
+                        JSONArray entries = jsonReply.getJSONArray("entries");
+                        for (int i = 0; i < entries.length(); i++) {
+                            searchListings.add(JsonUtils.parseSearchListingJson(entries.getJSONObject(i)));
+                        }
+                        ListingRecyclerAdapter mAdapter = new ListingRecyclerAdapter(getContext(), searchListings, authState.getAccessToken());
+                        LinearLayoutManager layoutManager =
+                                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setAdapter(mAdapter);
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    //StringBuilder userBuffer = new StringBuilder();
+                    //userBuffer.append("User Id: " + user.getId() + "\nName: " + user.getFirstName() + " " + user.getLastName() + "\nEmail: " + user.getEmail()
+                    //        + "\nAccounts: ");
+                    //for (String account : user.getAccountTypes()) {
+                    //    userBuffer.append(account);
+                    //    userBuffer.append(" | ");
+                    //}
+
+                    //userBuffer.append("\n\n" + jsonReply.toString());
+                    //Log.d("Search Frag: ", user.getEmail());
+                    //tv.setText(accountsBuffer.toString());
+                }
+            });
+
+        } else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //tv.setText("empty json returned");
+                }
+            });
+        }
     }
 
     /**

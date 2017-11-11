@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:backgroundTint="@color/cardview_dark_background"
+            android:scaleType="fitXY"
             android:src="@color/cardview_dark_background" />
 
         <LinearLayout
@@ -53,17 +55,17 @@
                 android:layout_weight="1"
                 android:text=" 2 Bedrooms" />
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@mipmap/ic_launcher" />
+            <!-- <ImageView
+                 android:layout_width="16dp"
+                 android:layout_height="16dp"
+                 app:srcCompat="@mipmap/ic_launcher" />
 
-            <TextView
-                android:id="@+id/sleeps_textview_list_item"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text=" Sleeps 2" />
+             <TextView
+                 android:id="@+id/sleeps_textview_list_item"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:text=" Sleeps 2" /> -->
 
         </LinearLayout>
 
@@ -80,7 +82,7 @@
             android:text="Charming  Comfortable Hyde Park Guest House"
             android:textAllCaps="true"
             android:textColor="#ffffff"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -94,7 +96,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="140 USD"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
