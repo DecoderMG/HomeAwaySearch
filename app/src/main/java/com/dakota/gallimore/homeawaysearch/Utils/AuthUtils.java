@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.dakota.gallimore.homeawaysearch.LoginActivity;
@@ -12,6 +13,7 @@ import com.dakota.gallimore.homeawaysearch.MainActivity;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
 
 import org.json.JSONException;
 
@@ -82,5 +84,11 @@ public class AuthUtils {
                 authRequest,
                 PendingIntent.getActivity(context, 0, completionIntent, 0),
                 PendingIntent.getActivity(context, 0, cancelIntent, 0));
+    }
+
+    public static AuthorizationServiceConfiguration getHomeAwayAuthorizationServiceConfiguration() {
+        return new AuthorizationServiceConfiguration(
+                Uri.parse("https://ws.homeaway.com/oauth/authorize"), // authorization endpoint
+                Uri.parse("https://ws.homeaway.com/oauth/token")); // token endpoint
     }
 }
