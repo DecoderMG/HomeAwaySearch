@@ -39,34 +39,30 @@ public class JsonUtils {
     /**
      * Method to parse HomeAway User Json into the User class variable.
      *
-     * @param object - Json object returned from HomeAway servers.
+     * @param jsonObject - Json object returned from HomeAway servers.
      * @return User object containing json data
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
-    public static User parseUserJson(JSONObject object) throws JSONException {
-        String firstName = "";
-        String lastName = "";
-        String email = "";
-        String id = "";
+
+    // TODO: Finish up User parsing once Profile Image API end is in place.
+    public static User parseUserJson(JSONObject jsonObject) throws JSONException {
+        String firstName;
+        String lastName;
+        String email;
+        String id;
         JSONArray accountsArray;
         String homeSite = "";
         String[] allAccounts = new String[]{""};
 
         try {
 
-            if (!object.isNull(Constants.JSON_FIRST_NAME) && !object.isNull(Constants.JSON_LAST_NAME)) {
-                firstName = object.getString(Constants.JSON_FIRST_NAME);
-                lastName = object.getString(Constants.JSON_LAST_NAME);
-            }
-            if (!object.isNull(Constants.JSON_EMAIL)) {
-                email = object.getString(Constants.JSON_EMAIL);
-            }
-            if (!object.isNull(Constants.JSON_ID)) {
-                id = object.getString(Constants.JSON_ID);
-            }
+            firstName = jsonObject.getString(Constants.JSON_FIRST_NAME);
+            lastName = jsonObject.getString(Constants.JSON_LAST_NAME);
+            email = jsonObject.getString(Constants.JSON_EMAIL);
+            id = jsonObject.getString(Constants.JSON_ID);
 
-            if (!object.isNull(Constants.JSON_ACCOUNTS)) {
-                accountsArray = object.getJSONArray(Constants.JSON_ACCOUNTS);
+            if (jsonObject.has(Constants.JSON_ACCOUNTS)) {
+                accountsArray = jsonObject.getJSONArray(Constants.JSON_ACCOUNTS);
 
                 allAccounts = new String[accountsArray.length()];
 
@@ -96,16 +92,16 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Amenities parseAmenityJson(JSONObject jsonObject) throws JSONException {
-        int count = 0;
-        String category = "";
-        String description = "";
-        String localizedName = "";
+        int count;
+        String category;
+        String description;
+        String localizedName;
 
         try {
-            count = jsonObject.getInt(Constants.JSON_COUNT);
-            category = jsonObject.getString(Constants.JSON_CATEGORY);
-            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
-            localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
+            count = checkNullAndReturnInt(jsonObject, Constants.JSON_COUNT);
+            category = checkNullAndReturnString(jsonObject, Constants.JSON_CATEGORY);
+            description = checkNullAndReturnString(jsonObject, Constants.JSON_DESCRIPTION);
+            localizedName = checkNullAndReturnString(jsonObject, Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Amenities type with error: " + e.getMessage());
@@ -124,17 +120,19 @@ public class JsonUtils {
      */
     public static Room parseRoomJson(JSONObject jsonObject, String roomType) throws JSONException {
         ArrayList<Amenities> amenities = new ArrayList<>();
-        String roomName = "";
-        String roomSubType = "";
+        String roomName;
+        String roomSubType;
 
         try {
-            JSONArray amenitiesJson = jsonObject.getJSONArray(Constants.JSON_AMENITIES);
-            for (int i = 0; i < amenitiesJson.length(); i++) {
-                Amenities amenity = parseAmenityJson(amenitiesJson.getJSONObject(i));
-                amenities.add(amenity);
+            if (jsonObject.has(Constants.JSON_AMENITIES)) {
+                JSONArray amenitiesJson = jsonObject.getJSONArray(Constants.JSON_AMENITIES);
+                for (int i = 0; i < amenitiesJson.length(); i++) {
+                    Amenities amenity = parseAmenityJson(amenitiesJson.getJSONObject(i));
+                    amenities.add(amenity);
+                }
             }
-            roomName = jsonObject.getString(Constants.JSON_NAME);
-            roomSubType = jsonObject.getString(Constants.JSON_ROOM_SUBTYPE);
+            roomName = checkNullAndReturnString(jsonObject, Constants.JSON_NAME);
+            roomSubType = checkNullAndReturnString(jsonObject, Constants.JSON_ROOM_SUBTYPE);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Room type with error: " + e.getMessage());
@@ -150,23 +148,23 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Review parseReviewJson(JSONObject jsonObject) throws JSONException {
-        String reviewDate = "";
-        String reviewerName = "";
-        String body = "";
-        String headline = "";
-        int helpfulCount = 0;
-        int unhelpfulCount = 0;
+        String reviewDate;
+        String reviewerName;
+        String body;
+        String headline;
+        int helpfulCount;
+        int unhelpfulCount;
         double rating = 0.0;
-        String reviewLocale = "";
+        String reviewLocale;
 
         try {
-            reviewDate = jsonObject.getString(Constants.JSON_ARRIVAL_DATE);
-            reviewerName = jsonObject.getString(Constants.JSON_REVIEWER_NAME);
-            body = jsonObject.getString(Constants.JSON_BODY);
-            headline = jsonObject.getString(Constants.JSON_HEADLINE);
-            helpfulCount = jsonObject.getInt(Constants.JSON_HELPFUL_COUNT);
-            unhelpfulCount = jsonObject.getInt(Constants.JSON_UNHELPFUL_COUNT);
-            reviewLocale = jsonObject.getString(Constants.JSON_REVIEW_LOCALE);
+            reviewDate = checkNullAndReturnString(jsonObject, Constants.JSON_ARRIVAL_DATE);
+            reviewerName = checkNullAndReturnString(jsonObject, Constants.JSON_REVIEWER_NAME);
+            body = checkNullAndReturnString(jsonObject, Constants.JSON_BODY);
+            headline = checkNullAndReturnString(jsonObject, Constants.JSON_HEADLINE);
+            helpfulCount = checkNullAndReturnInt(jsonObject, Constants.JSON_HELPFUL_COUNT);
+            unhelpfulCount = checkNullAndReturnInt(jsonObject, Constants.JSON_UNHELPFUL_COUNT);
+            reviewLocale = checkNullAndReturnString(jsonObject, Constants.JSON_REVIEW_LOCALE);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Review type with error: " + e.getMessage());
@@ -188,10 +186,10 @@ public class JsonUtils {
         String localizedName;
 
         try {
-            count = jsonObject.getInt(Constants.JSON_COUNT);
-            category = jsonObject.getString(Constants.JSON_CATEGORY);
-            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
-            localizedName = jsonObject.getString(Constants.JSON_LOCALIZED_NAME);
+            count = checkNullAndReturnInt(jsonObject, Constants.JSON_COUNT);
+            category = checkNullAndReturnString(jsonObject, Constants.JSON_CATEGORY);
+            description = checkNullAndReturnString(jsonObject, Constants.JSON_DESCRIPTION);
+            localizedName = checkNullAndReturnString(jsonObject, Constants.JSON_LOCALIZED_NAME);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for Feature type with error: " + e.getMessage());
@@ -214,13 +212,19 @@ public class JsonUtils {
         String currency = "";
 
         try {
-            JSONObject dateRange = jsonObject.getJSONObject(Constants.JSON_DATE_RANGE);
-            JSONObject weeklyObject = jsonObject.getJSONObject(Constants.JSON_RATES).getJSONObject(Constants.JSON_WEEKLY);
-            arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString(Constants.JSON_BEGIN_DATE));
-            leaveDate = new SimpleDateFormat("YYYY-MM-DD").parse(dateRange.getString(Constants.JSON_END_DATE));
-            minimumStay = jsonObject.getInt(Constants.JSON_MIN_STAY);
-            weeklyRate = weeklyObject.getDouble(Constants.JSON_AMOUNT);
-            currency = weeklyObject.getString(Constants.JSON_CURRENCY);
+            if (jsonObject.has(Constants.JSON_DATE_RANGE)) {
+                JSONObject dateRange = jsonObject.getJSONObject(Constants.JSON_DATE_RANGE);
+                arrivalDate = new SimpleDateFormat("YYYY-MM-DD").parse(
+                        checkNullAndReturnString(dateRange, Constants.JSON_BEGIN_DATE));
+                leaveDate = new SimpleDateFormat("YYYY-MM-DD").parse(
+                        checkNullAndReturnString(dateRange, Constants.JSON_END_DATE));
+            }
+            minimumStay = checkNullAndReturnInt(jsonObject, Constants.JSON_MIN_STAY);
+            if (jsonObject.has(Constants.JSON_RATES)) {
+                JSONObject weeklyObject = jsonObject.getJSONObject(Constants.JSON_RATES).getJSONObject(Constants.JSON_WEEKLY);
+                weeklyRate = checkNullAndReturnDouble(weeklyObject, Constants.JSON_AMOUNT);
+                currency = checkNullAndReturnString(weeklyObject, Constants.JSON_CURRENCY);
+            }
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid Json data for RatePeriod type with error: " + e.getMessage());
@@ -238,7 +242,7 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Unit parseUnitJson(JSONObject jsonObject) throws JSONException {
-        int unitNumber = 0;
+        int unitNumber;
         int unitArea = 0;
         String areaUnit = "";
 
@@ -256,35 +260,58 @@ public class JsonUtils {
         double averageReviewScore = 0;
 
         try {
-            unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
-            JSONObject unitContent = jsonObject.getJSONObject(Constants.JSON_UNIT_CONTENT);
-            unitArea = unitContent.getInt(Constants.JSON_AREA);
-            areaUnit = unitContent.getString(Constants.JSON_AREA_UNIT);
-            JSONArray bathroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BATHROOMS);
-            for (int i = 0; i < bathroomArray.length(); i++) {
-                rooms.add(parseRoomJson(bathroomArray.getJSONObject(i), "bathroom"));
+            unitNumber = checkNullAndReturnInt(jsonObject, Constants.JSON_UNIT_NUMBER);
+            if (jsonObject.has(Constants.JSON_UNIT_CONTENT)) {
+
+                JSONObject unitContent = jsonObject.getJSONObject(Constants.JSON_UNIT_CONTENT);
+
+                unitArea = checkNullAndReturnInt(unitContent, Constants.JSON_AREA);
+                areaUnit = checkNullAndReturnString(unitContent, Constants.JSON_AREA_UNIT);
+
+                if (unitContent.has(Constants.JSON_ROOM_BATHROOMS)) {
+                    JSONArray bathroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BATHROOMS);
+                    for (int i = 0; i < bathroomArray.length(); i++) {
+                        rooms.add(parseRoomJson(bathroomArray.getJSONObject(i), "bathroom"));
+                    }
+                    numOfBathrooms = bathroomArray.length();
+                } else {
+                    numOfBathrooms = 0;
+                }
+
+                if (unitContent.has(Constants.JSON_ROOM_BEDROOMS)) {
+                    JSONArray bedroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BEDROOMS);
+                    for (int i = 0; i < bedroomArray.length(); i++) {
+                        rooms.add(parseRoomJson(bedroomArray.getJSONObject(i), "bedroom"));
+                    }
+                    numOfBedrooms = bedroomArray.length();
+                } else {
+                    numOfBedrooms = 0;
+                }
+                maxSleep = checkNullAndReturnInt(unitContent, Constants.JSON_MAX_SLEEP);
+                maxSleepInBeds = checkNullAndReturnInt(unitContent, Constants.JSON_MAX_SLEEP_IN_BEDS);
+                propertyType = checkNullAndReturnString(unitContent, Constants.JSON_PROPERTY_TYPE);
+
+                if (unitContent.has(Constants.JSON_FEATURES)) {
+                    JSONArray featureArray = unitContent.getJSONArray(Constants.JSON_FEATURES);
+                    for (int i = 0; i < featureArray.length(); i++) {
+                        features.add(parseFeatureJson(featureArray.getJSONObject(i)));
+                    }
+                }
             }
-            JSONArray bedroomArray = unitContent.getJSONArray(Constants.JSON_ROOM_BEDROOMS);
-            for (int i = 0; i < bedroomArray.length(); i++) {
-                rooms.add(parseRoomJson(bedroomArray.getJSONObject(i), "bedroom"));
+
+            if (jsonObject.has(Constants.JSON_UNIT_REVIEW_CONTENT)) {
+                JSONArray reviewContent = jsonObject.getJSONObject(Constants.JSON_UNIT_REVIEW_CONTENT)
+                        .getJSONArray(Constants.JSON_ENTRIES);
+                for (int i = 0; i < reviewContent.length(); i++) {
+                    reviews.add(parseReviewJson(reviewContent.getJSONObject(i)));
+                }
             }
-            maxSleep = unitContent.getInt(Constants.JSON_MAX_SLEEP);
-            maxSleepInBeds = unitContent.getInt(Constants.JSON_MAX_SLEEP_IN_BEDS);
-            numOfBathrooms = bathroomArray.length();
-            numOfBedrooms = bedroomArray.length();
-            propertyType = unitContent.getString(Constants.JSON_PROPERTY_TYPE);
-            JSONArray featureArray = unitContent.getJSONArray(Constants.JSON_FEATURES);
-            for (int i = 0; i < featureArray.length(); i++) {
-                features.add(parseFeatureJson(featureArray.getJSONObject(i)));
-            }
-            JSONArray reviewContent = jsonObject.getJSONObject(Constants.JSON_UNIT_REVIEW_CONTENT)
-                    .getJSONArray(Constants.JSON_ENTRIES);
-            for (int i = 0; i < reviewContent.length(); i++) {
-                reviews.add(parseReviewJson(reviewContent.getJSONObject(i)));
-            }
-            JSONArray ratePeriodArray = jsonObject.getJSONArray(Constants.JSON_RATE_PERIODS);
-            for (int i = 0; i < ratePeriodArray.length(); i++) {
-                ratePeriods.add(parseRatePeriodJson(ratePeriodArray.getJSONObject(i)));
+
+            if (jsonObject.has(Constants.JSON_RATE_PERIODS)) {
+                JSONArray ratePeriodArray = jsonObject.getJSONArray(Constants.JSON_RATE_PERIODS);
+                for (int i = 0; i < ratePeriodArray.length(); i++) {
+                    ratePeriods.add(parseRatePeriodJson(ratePeriodArray.getJSONObject(i)));
+                }
             }
             return new Unit(unitNumber, unitArea, areaUnit,
                     features, reviews, rooms, ratePeriods, maxSleep,
@@ -305,7 +332,7 @@ public class JsonUtils {
      * @throws MalformedURLException - When provided photo URLs are malformed.
      */
     public static ListingMedia parseMediaJson(JSONObject jsonObject, String imageType) throws JSONException, MalformedURLException {
-        String caption = "";
+        String caption;
         int height = 0;
         int width = 0;
         URL url = null;
@@ -314,17 +341,18 @@ public class JsonUtils {
         try {
             if (!imageType.equals(Constants.JSON_PHOTO_IMAGE_TYPE)) {
                 caption = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE).getString(Constants.JSON_CAPTION);
-                unitNumber = jsonObject.getInt(Constants.JSON_UNIT_NUMBER);
+                unitNumber = checkNullAndReturnInt(jsonObject, Constants.JSON_UNIT_NUMBER);
                 jsonObject = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE);
             } else {
-                if (!jsonObject.isNull(Constants.JSON_CAPTION)) {
-                    caption = jsonObject.getString(Constants.JSON_CAPTION);
-                }
+                caption = checkNullAndReturnString(jsonObject, Constants.JSON_CAPTION);
             }
-            JSONObject imageSpecs = jsonObject.getJSONObject(Constants.JSON_IMAGE_LARGE_SIZE);
-            height = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_HEIGHT);
-            width = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_WIDTH);
-            url = new URL(imageSpecs.getString(Constants.JSON_URL));
+
+            if (jsonObject.has(Constants.JSON_IMAGE_LARGE_SIZE)) {
+                JSONObject imageSpecs = jsonObject.getJSONObject(Constants.JSON_IMAGE_LARGE_SIZE);
+                height = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_HEIGHT);
+                width = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_WIDTH);
+                url = new URL(imageSpecs.getString(Constants.JSON_URL));
+            }
 
             return new ListingMedia(caption, height, width, imageType, url, unitNumber);
 
@@ -344,12 +372,14 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Site parseSiteJson(JSONObject jsonObject) throws JSONException {
-        String href = "";
-        String rel = "";
+        String href;
+        String rel;
 
         try {
-            href = jsonObject.getString(Constants.JSON_HREF);
-            rel = jsonObject.getString(Constants.JSON_REL);
+
+            href = checkNullAndReturnString(jsonObject, Constants.JSON_HREF);
+            rel = checkNullAndReturnString(jsonObject, Constants.JSON_REL);
+
             return new Site(href, rel);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
@@ -364,28 +394,20 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Location parseLocationJson(JSONObject jsonObject) throws JSONException {
-        double lat = 0;
-        double lng = 0;
-        String city = "";
-        String state = "";
-        String counrty = "";
+        double lat;
+        double lng;
+        String city;
+        String state;
+        String counrty;
 
         try {
-            if (!jsonObject.isNull(Constants.JSON_LATITUDE)) {
-                lat = jsonObject.getDouble(Constants.JSON_LATITUDE);
-            }
-            if (!jsonObject.isNull(Constants.JSON_LONGITUDE)) {
-                lng = jsonObject.getDouble(Constants.JSON_LONGITUDE);
-            }
-            if (!jsonObject.isNull(Constants.JSON_CITY)) {
-                city = jsonObject.getString(Constants.JSON_CITY);
-            }
-            if (!jsonObject.isNull(Constants.JSON_STATE)) {
-                state = jsonObject.getString(Constants.JSON_STATE);
-            }
-            if (!jsonObject.isNull(Constants.JSON_COUNTRY)) {
-                counrty = jsonObject.getString(Constants.JSON_COUNTRY);
-            }
+
+            lat = checkNullAndReturnDouble(jsonObject, Constants.JSON_LATITUDE);
+            lng = checkNullAndReturnDouble(jsonObject, Constants.JSON_LONGITUDE);
+            city = checkNullAndReturnString(jsonObject, Constants.JSON_CITY);
+            state = checkNullAndReturnString(jsonObject, Constants.JSON_STATE);
+            counrty = checkNullAndReturnString(jsonObject, Constants.JSON_COUNTRY);
+
             return new Location(lat, lng, city, state, counrty);
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
@@ -402,10 +424,10 @@ public class JsonUtils {
      * @throws JSONException - When inputted Json object does not match HomeAway documented JSON.
      */
     public static Listing parseListingJson(JSONObject jsonObject) throws JSONException {
-        String listingId = "";
-        String listingUrl = "";
-        String sourceLocale = "";
-        String sourceLocaleName = "";
+        String listingId;
+        String listingUrl;
+        String sourceLocale;
+        String sourceLocaleName;
         String description = "";
         String headline = "";
         ArrayList<Feature> features = new ArrayList<>();
@@ -415,40 +437,58 @@ public class JsonUtils {
         ArrayList<Unit> units = new ArrayList<>();
 
         try {
-            listingId = jsonObject.getString(Constants.JSON_LISTING_ID);
-            listingUrl = jsonObject.getString(Constants.JSON_LISTING_URL);
-            sourceLocale = jsonObject.getString(Constants.JSON_SOURCE_LOCALE);
-            sourceLocaleName = jsonObject.getString(Constants.JSON_SOURCE_LOCALE_NAME);
+            listingId = checkNullAndReturnString(jsonObject, Constants.JSON_LISTING_ID);
+            listingUrl = checkNullAndReturnString(jsonObject, Constants.JSON_LISTING_URL);
+            sourceLocale = checkNullAndReturnString(jsonObject, Constants.JSON_SOURCE_LOCALE);
+            sourceLocaleName = checkNullAndReturnString(jsonObject, Constants.JSON_SOURCE_LOCALE_NAME);
 
-            JSONObject adContent = jsonObject.getJSONObject(Constants.JSON_AD_CONTENT);
-            description = adContent.getString(Constants.JSON_DESCRIPTION);
-            headline = adContent.getString(Constants.JSON_HEADLINE);
-
-            JSONArray featuresJsonArray = jsonObject.getJSONArray(Constants.JSON_FEATURES);
-            for (int i = 0; i < featuresJsonArray.length(); i++) {
-                features.add(parseFeatureJson(featuresJsonArray.getJSONObject(i)));
+            if (jsonObject.has(Constants.JSON_AD_CONTENT)) {
+                JSONObject adContent = jsonObject.getJSONObject(Constants.JSON_AD_CONTENT);
+                description = checkNullAndReturnString(adContent, Constants.JSON_DESCRIPTION);
+                headline = checkNullAndReturnString(adContent, Constants.JSON_HEADLINE);
             }
 
-            location = parseLocationJson(jsonObject.getJSONObject(Constants.JSON_LOCATION));
-
-            JSONArray sitesJsonArray = jsonObject.getJSONArray(Constants.JSON_SITES);
-            for (int i = 0; i < sitesJsonArray.length(); i++) {
-                sites.add(parseSiteJson(sitesJsonArray.getJSONObject(i)));
+            if (jsonObject.has(Constants.JSON_FEATURES)) {
+                JSONArray featuresJsonArray = jsonObject.getJSONArray(Constants.JSON_FEATURES);
+                for (int i = 0; i < featuresJsonArray.length(); i++) {
+                    features.add(parseFeatureJson(featuresJsonArray.getJSONObject(i)));
+                }
             }
 
-            JSONObject photosJson = jsonObject.getJSONObject(Constants.JSON_PHOTOS);
-            JSONArray photosJsonArray = photosJson.getJSONArray(Constants.JSON_PHOTOS);
-            for (int i = 0; i < photosJsonArray.length(); i++) {
-                photos.add(parseMediaJson(photosJsonArray.getJSONObject(i), "photo"));
-            }
-            JSONArray thumbnailJsonArray = photosJson.getJSONArray(Constants.JSON_THUMBNAILS);
-            for (int i = 0; i < thumbnailJsonArray.length(); i++) {
-                photos.add(parseMediaJson(thumbnailJsonArray.getJSONObject(i), "thumbnail"));
+            if (jsonObject.has(Constants.JSON_LOCATION)) {
+                location = parseLocationJson(jsonObject.getJSONObject(Constants.JSON_LOCATION));
             }
 
-            JSONArray unitsJsonArray = jsonObject.getJSONArray(Constants.JSON_UNITS);
-            for (int i = 0; i < unitsJsonArray.length(); i++) {
-                units.add(parseUnitJson(unitsJsonArray.getJSONObject(i)));
+            if (jsonObject.has(Constants.JSON_SITES)) {
+                JSONArray sitesJsonArray = jsonObject.getJSONArray(Constants.JSON_SITES);
+                for (int i = 0; i < sitesJsonArray.length(); i++) {
+                    sites.add(parseSiteJson(sitesJsonArray.getJSONObject(i)));
+                }
+            }
+
+            if (jsonObject.has(Constants.JSON_PHOTOS)) {
+                JSONObject photosJson = jsonObject.getJSONObject(Constants.JSON_PHOTOS);
+
+                if (photosJson.has(Constants.JSON_PHOTOS)) {
+                    JSONArray photosJsonArray = photosJson.getJSONArray(Constants.JSON_PHOTOS);
+                    for (int i = 0; i < photosJsonArray.length(); i++) {
+                        photos.add(parseMediaJson(photosJsonArray.getJSONObject(i), "photo"));
+                    }
+                }
+
+                if (photosJson.has(Constants.JSON_THUMBNAILS)) {
+                    JSONArray thumbnailJsonArray = photosJson.getJSONArray(Constants.JSON_THUMBNAILS);
+                    for (int i = 0; i < thumbnailJsonArray.length(); i++) {
+                        photos.add(parseMediaJson(thumbnailJsonArray.getJSONObject(i), "thumbnail"));
+                    }
+                }
+            }
+
+            if (jsonObject.has(Constants.JSON_UNITS)) {
+                JSONArray unitsJsonArray = jsonObject.getJSONArray(Constants.JSON_UNITS);
+                for (int i = 0; i < unitsJsonArray.length(); i++) {
+                    units.add(parseUnitJson(unitsJsonArray.getJSONObject(i)));
+                }
             }
 
             return new Listing(listingId, listingUrl, sourceLocale,
@@ -464,44 +504,28 @@ public class JsonUtils {
     }
 
     public static PriceQuote parsePriceQuoteJson(JSONObject jsonObject) throws JSONException {
-        String currencyUnits = "USD";
-        double amount = 0;
-        double other = 0;
-        double tax = 0;
-        double averageNightly = 0;
-        double fullyLoadedPriceQuote = 0;
-        double rent = 0;
-        double fees = 0;
-        double travelersFee = 0;
+        String currencyUnits;
+        double amount;
+        double other;
+        double tax;
+        double averageNightly;
+        double fullyLoadedPriceQuote;
+        double rent;
+        double fees;
+        double travelersFee;
 
         try {
-            if (!jsonObject.isNull(Constants.JSON_CURRENCY_UNITS)) {
-                currencyUnits = jsonObject.getString(Constants.JSON_CURRENCY_UNITS);
-            }
-            if (!jsonObject.isNull(Constants.JSON_AMOUNT)) {
-                amount = jsonObject.getDouble(Constants.JSON_AMOUNT);
-            }
-            if (!jsonObject.isNull(Constants.JSON_OTHER)) {
-                other = jsonObject.getDouble(Constants.JSON_OTHER);
-            }
-            if (!jsonObject.isNull(Constants.JSON_TAX)) {
-                tax = jsonObject.getDouble(Constants.JSON_TAX);
-            }
-            if (!jsonObject.isNull(Constants.JSON_AVERAGE_NIGHTLY)) {
-                averageNightly = jsonObject.getDouble(Constants.JSON_AVERAGE_NIGHTLY);
-            }
-            if (!jsonObject.isNull(Constants.JSON_FULLY_LOADED_PRICE_QUOTE)) {
-                fullyLoadedPriceQuote = jsonObject.getDouble(Constants.JSON_FULLY_LOADED_PRICE_QUOTE);
-            }
-            if (!jsonObject.isNull(Constants.JSON_RENT)) {
-                rent = jsonObject.getDouble(Constants.JSON_RENT);
-            }
-            if (!jsonObject.isNull(Constants.JSON_FEES)) {
-                fees = jsonObject.getDouble(Constants.JSON_FEES);
-            }
-            if (!jsonObject.isNull(Constants.JSON_TRAVELER_FEE)) {
-                travelersFee = jsonObject.getDouble(Constants.JSON_TRAVELER_FEE);
-            }
+
+            currencyUnits = checkNullAndReturnString(jsonObject, Constants.JSON_CURRENCY_UNITS);
+            amount = checkNullAndReturnDouble(jsonObject, Constants.JSON_AMOUNT);
+            other = checkNullAndReturnDouble(jsonObject, Constants.JSON_OTHER);
+            tax = checkNullAndReturnDouble(jsonObject, Constants.JSON_TAX);
+            averageNightly = checkNullAndReturnDouble(jsonObject, Constants.JSON_AVERAGE_NIGHTLY);
+            fullyLoadedPriceQuote = checkNullAndReturnDouble(jsonObject, Constants.JSON_FULLY_LOADED_PRICE_QUOTE);
+            rent = checkNullAndReturnDouble(jsonObject, Constants.JSON_RENT);
+            fees = checkNullAndReturnDouble(jsonObject, Constants.JSON_FEES);
+            travelersFee = checkNullAndReturnDouble(jsonObject, Constants.JSON_TRAVELER_FEE);
+
             return new PriceQuote(currencyUnits, amount, other, tax, averageNightly, fullyLoadedPriceQuote,
                     rent, fees, travelersFee);
         } catch (JSONException e) {
@@ -511,24 +535,17 @@ public class JsonUtils {
     }
 
     public static PriceRange parsePriceRangeJson(JSONObject jsonObject) throws JSONException {
-        double to = 0;
-        String currencyUnits = "";
-        String periodType = "";
-        double from = 0;
+        double to;
+        String currencyUnits;
+        String periodType;
+        double from;
 
         try {
-            if (!jsonObject.isNull(Constants.JSON_TO)) {
-                to = jsonObject.getDouble(Constants.JSON_TO);
-            }
-            if (!jsonObject.isNull(Constants.JSON_CURRENCY_UNITS)) {
-                currencyUnits = jsonObject.getString(Constants.JSON_CURRENCY_UNITS);
-            }
-            if (!jsonObject.isNull(Constants.JSON_PERIOD_TYPE)) {
-                periodType = jsonObject.getString(Constants.JSON_PERIOD_TYPE);
-            }
-            if (!jsonObject.isNull(Constants.JSON_FROM)) {
-                from = jsonObject.getDouble(Constants.JSON_FROM);
-            }
+
+            to = checkNullAndReturnDouble(jsonObject, Constants.JSON_TO);
+            currencyUnits = checkNullAndReturnString(jsonObject, Constants.JSON_CURRENCY_UNITS);
+            periodType = checkNullAndReturnString(jsonObject, Constants.JSON_PERIOD_TYPE);
+            from = checkNullAndReturnDouble(jsonObject, Constants.JSON_FROM);
 
             return new PriceRange(to, currencyUnits, periodType, from);
         } catch (JSONException e) {
@@ -538,49 +555,54 @@ public class JsonUtils {
     }
 
     public static SearchListing parseSearchListingJson(JSONObject jsonObject) throws JSONException, MalformedURLException {
-        String headline = "";
-        String accommodations = "";
+        String headline;
+        String accommodations;
         Location location = new Location();
-        double bathrooms = 0;
-        double bedrooms = 0;
-        URL detailsUrl = null;
+        double bathrooms;
+        double bedrooms;
+        URL detailsUrl;
         boolean bookWithConfidence = false;
-        String listingId = "";
-        String thumbnailUrl = "";
-        String description = "";
-        int reviewCount = 0;
-        String listingSource = "";
-        String listingUrl = "";
-        double reviewAverage = 0;
+        String listingId;
+        String thumbnailUrl;
+        String description;
+        int reviewCount;
+        String listingSource;
+        String listingUrl;
+        double reviewAverage;
 
         ArrayList<PriceRange> priceRanges = new ArrayList<>();
 
-        PriceQuote priceQuote;
+        PriceQuote priceQuote = new PriceQuote();
 
         try {
-            headline = jsonObject.getString(Constants.JSON_HEADLINE);
-            accommodations = jsonObject.getString(Constants.JSON_ACCOMMODATIONS);
+            headline = checkNullAndReturnString(jsonObject, Constants.JSON_HEADLINE);
+            accommodations = checkNullAndReturnString(jsonObject, Constants.JSON_ACCOMMODATIONS);
             location = parseLocationJson(jsonObject.getJSONObject(Constants.JSON_LOCATION));
-            bathrooms = jsonObject.getDouble(Constants.JSON_ROOM_BATHROOMS);
-            bedrooms = jsonObject.getDouble(Constants.JSON_ROOM_BEDROOMS);
-            detailsUrl = new URL(jsonObject.getString(Constants.JSON_DETAILS_URL));
-            bookWithConfidence = jsonObject.getBoolean(Constants.JSON_BOOK_WITH_CONFIDENCE);
-            listingId = jsonObject.getString(Constants.JSON_LISTING_ID);
-            description = jsonObject.getString(Constants.JSON_DESCRIPTION);
-            reviewCount = jsonObject.getInt(Constants.JSON_REVIEW_COUNT);
-            listingSource = jsonObject.getString(Constants.JSON_LISTING_SOURCE);
-            listingUrl = jsonObject.getString(Constants.JSON_LISTING_SOURCE_URL);
-            reviewAverage = jsonObject.getDouble(Constants.JSON_REVIEW_AVERAGE);
+            bathrooms = checkNullAndReturnDouble(jsonObject, Constants.JSON_ROOM_BATHROOMS);
+            bedrooms = checkNullAndReturnDouble(jsonObject, Constants.JSON_ROOM_BEDROOMS);
+            detailsUrl = new URL(checkNullAndReturnString(jsonObject, Constants.JSON_DETAILS_URL));
 
-            JSONObject thumbnailObject = jsonObject.getJSONObject("thumbnail");
-            thumbnailUrl = thumbnailObject.getString(Constants.JSON_URL);
+            if (!jsonObject.isNull(Constants.JSON_BOOK_WITH_CONFIDENCE)) {
+                bookWithConfidence = jsonObject.getBoolean(Constants.JSON_BOOK_WITH_CONFIDENCE);
+            }
+            listingId = checkNullAndReturnString(jsonObject, Constants.JSON_LISTING_ID);
+            description = checkNullAndReturnString(jsonObject, Constants.JSON_DESCRIPTION);
+            reviewCount = checkNullAndReturnInt(jsonObject, Constants.JSON_REVIEW_COUNT);
+            listingSource = checkNullAndReturnString(jsonObject, Constants.JSON_LISTING_SOURCE);
+            listingUrl = checkNullAndReturnString(jsonObject, Constants.JSON_LISTING_SOURCE_URL);
+            reviewAverage = checkNullAndReturnDouble(jsonObject, Constants.JSON_REVIEW_AVERAGE);
 
-            JSONArray priceRangeJsonArray = jsonObject.getJSONArray("priceRanges");
+            JSONObject thumbnailObject = jsonObject.getJSONObject(Constants.JSON_THUMBNAIL);
+            thumbnailUrl = checkNullAndReturnString(thumbnailObject, Constants.JSON_URL);
+
+            JSONArray priceRangeJsonArray = jsonObject.getJSONArray(Constants.JSON_PRICE_RANGES);
             for (int i = 0; i < priceRangeJsonArray.length(); i++) {
                 priceRanges.add(parsePriceRangeJson(priceRangeJsonArray.getJSONObject(i)));
             }
 
-            priceQuote = parsePriceQuoteJson(jsonObject.getJSONObject(Constants.JSON_PRICE_QUOTE));
+            if (!jsonObject.isNull(Constants.JSON_PRICE_QUOTE)) {
+                priceQuote = parsePriceQuoteJson(jsonObject.getJSONObject(Constants.JSON_PRICE_QUOTE));
+            }
 
             return new SearchListing(headline, accommodations, location, bathrooms, bedrooms, detailsUrl, bookWithConfidence, listingId, thumbnailUrl,
                     description, reviewCount, listingSource, listingUrl, reviewAverage, priceRanges, priceQuote);
@@ -591,6 +613,30 @@ public class JsonUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new MalformedURLException("Malformed URL in the detailsURL JSON reply");
+        }
+    }
+
+    private static int checkNullAndReturnInt(JSONObject jsonObject, String jsonKey) throws JSONException {
+        if (jsonObject.has(jsonKey) && !jsonObject.isNull(jsonKey)) {
+            return jsonObject.getInt(jsonKey);
+        } else {
+            return 0;
+        }
+    }
+
+    private static String checkNullAndReturnString(JSONObject jsonObject, String jsonKey) throws JSONException {
+        if (jsonObject.has(jsonKey) && !jsonObject.isNull(jsonKey)) {
+            return jsonObject.getString(jsonKey);
+        } else {
+            return "";
+        }
+    }
+
+    private static double checkNullAndReturnDouble(JSONObject jsonObject, String jsonKey) throws JSONException {
+        if (jsonObject.has(jsonKey) && !jsonObject.isNull(jsonKey)) {
+            return jsonObject.getDouble(jsonKey);
+        } else {
+            return 0;
         }
     }
 }
