@@ -1,10 +1,12 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import java.io.Serializable;
+
 /**
  * Created by galli_000 on 11/7/2017.
  */
 
-public class PriceQuote {
+public class PriceQuote implements Serializable {
 
     private String currencyUnits;
     private double amount;

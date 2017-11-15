@@ -1,10 +1,12 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import java.io.Serializable;
+
 /**
  * Created by galli_000 on 11/10/2017.
  */
 
-public class PriceRange {
+public class PriceRange implements Serializable {
 
     private double to;
     private String currencyUnits;

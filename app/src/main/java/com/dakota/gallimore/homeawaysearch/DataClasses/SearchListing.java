@@ -2,6 +2,7 @@ package com.dakota.gallimore.homeawaysearch.DataClasses;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Created by galli_000 on 11/7/2017.
  */
 
-public class SearchListing {
+public class SearchListing implements Serializable {
     ArrayList<PriceRange> priceRanges;
     private String headline;
     private String accommodations;

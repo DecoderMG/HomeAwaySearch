@@ -1,11 +1,13 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import java.io.Serializable;
+
 /**
  * Created by galli_000 on 11/2/2017.
  * Class containing location data for listings
  */
 
-public class Location {
+public class Location implements Serializable {
 
     private double latitude;
     private double longitude;

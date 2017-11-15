@@ -16,8 +16,8 @@ public class Listing {
     private String listingUrl;
     private String sourceLocale;
     private String sourceLocaleName;
-    private String description;
-    private String headline;
+    private String description; // Done
+    private String headline; // Done
     private ArrayList<Feature> features;
     private Location location;
     private ArrayList<Site> sites;
