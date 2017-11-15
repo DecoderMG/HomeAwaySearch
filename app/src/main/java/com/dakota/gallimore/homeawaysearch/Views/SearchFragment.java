@@ -1,21 +1,24 @@
 package com.dakota.gallimore.homeawaysearch.Views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.DataClasses.User;
+import com.dakota.gallimore.homeawaysearch.ListingActivity;
 import com.dakota.gallimore.homeawaysearch.R;
+import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
 import com.dakota.gallimore.homeawaysearch.Utils.AuthUtils;
 import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkCallback;
@@ -46,23 +49,18 @@ import java.util.ArrayList;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements AdapterClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match,
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    // May not need additional parameters upon completion.
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     AuthState authState;
     AuthorizationServiceConfiguration serviceConfig;
     JSONObject jsonReply;
-    EditText ed;
     RecyclerView mRecyclerView;
-    // TODO: Rename and change types of parameters, may not need parameters
-    private String mParam1;
-    private String mParam2;
+    ArrayList<SearchListing> searchListings;
     private OnFragmentInteractionListener mListener;
+
+    // TODO: Update Search UI to have a better looking search bar
+    // and results have a more material design... perhaps remove description from card view.
 
     public SearchFragment() {
         // Required empty public constructor
@@ -78,27 +76,18 @@ public class SearchFragment extends Fragment {
      */
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-        ed = rootView.findViewById(R.id.search);
         mRecyclerView = rootView.findViewById(R.id.listing_search_results_recyclerview);
         LinearLayoutManager linearLayoutManager =
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -133,27 +122,30 @@ public class SearchFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // Set up Authorization details to access HomeAway API.
         serviceConfig = AuthUtils.getHomeAwayAuthorizationServiceConfiguration();
         AuthorizationResponse resp = AuthorizationResponse.fromIntent(getActivity().getIntent());
         AuthorizationException ex = AuthorizationException.fromIntent(getActivity().getIntent());
 
+        // We need to check for token validity since we received a successful reply from HomeAway servers, we should process it.
         if (resp != null) {
             // authorization completed
             authState = new AuthState(serviceConfig);
 
+            // Update out authentication status for single sign on
             authState.update(resp, ex);
-            //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
+
+            // Should probably find a better way but HomeAway requires the client key and secret to be transmitted
+            // with requests in an authorization header.
             ClientAuthentication clientAuth = new ClientSecretBasic("9529fdde-76d2-4c47-a8ec-8299235f77c7");
 
-            TokenRequest req = resp.createTokenExchangeRequest();//new TokenRequest.Builder(serviceConfig, "b7159595-c72d-4c9b-8c53-37d649a7d2b8")
-            //.setGrantType("").build();
+            TokenRequest req = resp.createTokenExchangeRequest();
             final AuthorizationService authorizationService = new AuthorizationService(getActivity());
 
             authorizationService.performTokenRequest(req, clientAuth, new AuthorizationService.TokenResponseCallback() {
                 @Override
                 public void onTokenRequestCompleted(@Nullable TokenResponse response, @Nullable AuthorizationException aEx) {
                     if (response != null) {
-                        //tv.setText("Access Token: " + response.accessToken);
                         authState.update(response, aEx);
                         AuthUtils.writeAuthState(authState, getContext());
 
@@ -174,7 +166,6 @@ public class SearchFragment extends Fragment {
                                         displayJsonListings(jsonObject);
                                     }
                                 });
-
                             }
                         });
 
@@ -185,6 +176,8 @@ public class SearchFragment extends Fragment {
                 }
             });
         } else if (ex == null) {
+            // We did not fetch a reply from HomeAway servers and did not run into an error,
+            // out cached access token is still valid, proceed with requests.
 
             authState = AuthUtils.readAuthState(getActivity());
             //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
@@ -195,51 +188,8 @@ public class SearchFragment extends Fragment {
                     displayJsonListings(jsonObject);
                 }
             });
-
-
-            /*
-                    OkHttpClient client = new OkHttpClient();
-
-
-
-
-                    Request request = new Request.Builder()
-                            .url("https://ws.homeaway.com/public/myListings")
-                            .addHeader("Authorization", "Bearer " + authState.getAccessToken())
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, final IOException e) {
-                            final String exception = e.getMessage();
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tv.setText(exception);
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, final Response response) throws IOException {
-                            if(!response.isSuccessful()) {
-                                throw new IOException("Unexpected code " + response);
-                            } else {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            tv.setText(response.body().string());
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }); */
         }
+        //TODO: Handle complete authentication failure flow.
     }
 
     @Override
@@ -259,6 +209,11 @@ public class SearchFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Populates RecyclerView from JSON data provided by HomeAway.
+     *
+     * @param jsonObject - JSONObject containing HomeAway search results
+     */
     private void displayJsonListings(JSONObject jsonObject) {
         jsonReply = jsonObject;
         if (jsonReply != null) {
@@ -268,17 +223,21 @@ public class SearchFragment extends Fragment {
                 public void run() {
                     User user = null;
                     try {
-                        ArrayList<SearchListing> searchListings = new ArrayList<>();
+                        searchListings = new ArrayList<>();
                         JSONArray entries = jsonReply.getJSONArray("entries");
                         for (int i = 0; i < entries.length(); i++) {
                             searchListings.add(JsonUtils.parseSearchListingJson(entries.getJSONObject(i)));
                         }
-                        ListingRecyclerAdapter mAdapter = new ListingRecyclerAdapter(getContext(), searchListings, authState.getAccessToken());
+                        ListingRecyclerAdapter mAdapter = new ListingRecyclerAdapter(getContext(),
+                                searchListings,
+                                authState.getAccessToken());
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
                         LinearLayoutManager layoutManager =
                                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setLayoutManager(gridLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
+                        mAdapter.setClickListener(SearchFragment.this);
 
 
                     } catch (JSONException e) {
@@ -286,28 +245,25 @@ public class SearchFragment extends Fragment {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    //StringBuilder userBuffer = new StringBuilder();
-                    //userBuffer.append("User Id: " + user.getId() + "\nName: " + user.getFirstName() + " " + user.getLastName() + "\nEmail: " + user.getEmail()
-                    //        + "\nAccounts: ");
-                    //for (String account : user.getAccountTypes()) {
-                    //    userBuffer.append(account);
-                    //    userBuffer.append(" | ");
-                    //}
-
-                    //userBuffer.append("\n\n" + jsonReply.toString());
-                    //Log.d("Search Frag: ", user.getEmail());
-                    //tv.setText(accountsBuffer.toString());
                 }
             });
 
         } else {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //tv.setText("empty json returned");
-                }
-            });
+            //TODO: Handle null reply from HomeAway
         }
+    }
+
+    /**
+     * Handle OnClick from RecyclerView
+     *
+     * @param view     - view clicked on
+     * @param position - position of clicked view in recyclerview
+     */
+    @Override
+    public void itemClicked(View view, int position) {
+        Intent intent = new Intent(getContext(), ListingActivity.class);
+        intent.putExtra("SearchListing", searchListings.get(position));
+        startActivity(intent);
     }
 
     /**

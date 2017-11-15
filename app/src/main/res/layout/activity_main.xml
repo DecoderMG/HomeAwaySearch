@@ -1,19 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dakota.gallimore.homeawaysearch.MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/fragment_holder"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:elevation="8dp">
 
-    </ScrollView>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_backdrop"
+                app:layout_collapseMode="pin"
+                app:paddingEnd="0dp"
+                app:paddingStart="0dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Search Bar"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/searchLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="18dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="18dp"
+                        android:background="#f1f5f8"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true">
+
+                        <ImageButton
+                            android:id="@+id/imageSearch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/transparent"
+                            android:src="@mipmap/ic_search_grey" />
+
+                        <EditText
+                            android:id="@+id/editTextSearch"
+                            style="@style/SearchInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="64dp"
+                            android:layout_toEndOf="@+id/imageSearch"
+                            android:hint="Search here"
+                            android:textColor="#939393"
+                            android:textColorHint="#bababa"
+                            android:textSize="21sp" />
+
+                        <ImageButton
+                            android:id="@+id/buttonClear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/transparent"
+                            android:src="@mipmap/ic_close_gray" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/fragment_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </ScrollView>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
