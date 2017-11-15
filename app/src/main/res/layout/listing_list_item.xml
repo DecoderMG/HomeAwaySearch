@@ -1,151 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search_listing_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    app:cardElevation="4dp">
+    android:foreground="?attr/selectableItemBackground">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/listing_card_imageview"
+            android:id="@+id/thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:src="@color/cardview_dark_background" />
-
-        <LinearLayout
-            android:id="@+id/listing_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/listing_card_imageview"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@mipmap/ic_launcher" />
-
-            <TextView
-                android:id="@+id/bathrooms_textview_list_item"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.1"
-                android:text=" 2.5 Bathrooms" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                app:srcCompat="@mipmap/ic_launcher" />
-
-            <TextView
-                android:id="@+id/bedrooms_textview_list_item"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text=" 2 Bedrooms" />
-
-            <!-- <ImageView
-                 android:layout_width="16dp"
-                 android:layout_height="16dp"
-                 app:srcCompat="@mipmap/ic_launcher" />
-
-             <TextView
-                 android:id="@+id/sleeps_textview_list_item"
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:text=" Sleeps 2" /> -->
-
-        </LinearLayout>
+            android:layout_height="150dp"
+            android:scaleType="fitXY" />
 
         <TextView
-            android:id="@+id/listing_headline_list_item"
+            android:id="@+id/rate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/listing_description"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:text="Charming  Comfortable Hyde Park Guest House"
-            android:textAllCaps="true"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/room_rate_textview_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/listing_headline_list_item"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:text="140 USD"
-            android:textColor="#FF5722"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/payment_term_textview_list_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/room_rate_textview_list_item"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_toEndOf="@+id/room_rate_textview_list_item"
-            android:layout_toRightOf="@+id/room_rate_textview_list_item"
-            android:text="NIGHTLY-WEEKDAY"
-            android:textColor="#FF5722" />
-
-        <!--     <TextView
-                 android:id="@+id/description_textview_list_item"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_below="@+id/location_imageview_list_item"
-                 android:layout_marginBottom="16dp"
-                 android:layout_marginEnd="16dp"
-                 android:layout_marginLeft="16dp"
-                 android:layout_marginRight="16dp"
-                 android:layout_marginStart="16dp"
-                 android:text="Charming  perfectly located backyard bungalow for your next visit to beautiful Austin, TX! Located just off 38th St. in renown Hyde Park and a hair north of Univ. of Texas (just over 1 mi. from Darrell Royal Memorial Stadium for football games), ..." />
-     -->
-        <ImageView
-            android:id="@+id/location_imageview_list_item"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_below="@+id/listing_description"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:gravity="center_horizontal"
+            android:text="Book Shelf"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/location_textview_list_item"
+            android:id="@+id/headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="4dp"
+            android:text="Desk Interior, Workspace"
+            android:textColor="#383838"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/location_imageview_list_item"
-            android:layout_toEndOf="@+id/location_imageview_list_item"
-            android:layout_toRightOf="@+id/location_imageview_list_item"
-            android:text="Austin, TX USA"
-            android:textSize="14sp" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:text="140USD Weekly" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

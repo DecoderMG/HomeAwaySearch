@@ -13,6 +13,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.R;
+import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
     Context mContext;
     ArrayList<SearchListing> data = new ArrayList<>();
     String accessToken;
+    private AdapterClickListener clicklistener = null;
 
     public ListingRecyclerAdapter(Context context, ArrayList<SearchListing> data) {
         super();
@@ -49,15 +51,13 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
     }
 
     @Override
-    public void onBindViewHolder(ListingViewHolder holder, int position) {
+    public void onBindViewHolder(ListingViewHolder holder, final int position) {
         SearchListing searchListing = data.get(position);
 
         holder.headline.setText(searchListing.getHeadline());
-        holder.description.setText(searchListing.getDescription());
-        holder.bathrooms.setText(searchListing.getBathrooms() + " Bathroom(s)");
-        holder.bedrooms.setText(searchListing.getBedrooms() + " Bedroom(s)");
-        holder.roomRate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
+        holder.rate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
 
+        // Make sure we have the access token and use ti to access restricted HomeAway data.
         if (accessToken != "") {
             GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnailUrl(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken).build());
@@ -66,8 +66,19 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
         } else {
             Glide.with(mContext).load(searchListing.getThumbnailUrl()).into(holder.listingImage);
         }
-        holder.roomRatePeriod.setText(searchListing.getPriceRange(0).getPeriodType());
+        if (searchListing.getPriceRanges().size() > 1) {
+            holder.rate.setText(searchListing.getPriceRange(0).getPeriodType());
+        }
         holder.location.setText(searchListing.getLocation().getCity() + ", " + searchListing.getLocation().getState() + " " + searchListing.getLocation().getCountry());
+    }
+
+    /**
+     * Sets Interface click listener for RecyclerView.
+     *
+     * @param listener - listener to apply to RecyclerView
+     */
+    public void setClickListener(AdapterClickListener listener) {
+        this.clicklistener = listener;
     }
 
     @Override
@@ -75,28 +86,34 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
         return data.size();
     }
 
-    public class ListingViewHolder extends RecyclerView.ViewHolder {
+    public class ListingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        public TextView rate;
         public TextView headline;
-        public TextView description;
-        public TextView roomRate;
-        public TextView roomRatePeriod;
-        public TextView bedrooms;
-        public TextView bathrooms;
         public TextView location;
         public ImageView listingImage;
 
         public ListingViewHolder(View itemView) {
             super(itemView);
 
-            headline = itemView.findViewById(R.id.listing_headline_list_item);
-            description = itemView.findViewById(R.id.description_textview_list_item);
-            roomRate = itemView.findViewById(R.id.room_rate_textview_list_item);
-            roomRatePeriod = itemView.findViewById(R.id.payment_term_textview_list_item);
-            bedrooms = itemView.findViewById(R.id.bedrooms_textview_list_item);
-            bathrooms = itemView.findViewById(R.id.bathrooms_textview_list_item);
-            location = itemView.findViewById(R.id.location_textview_list_item);
-            listingImage = itemView.findViewById(R.id.listing_card_imageview);
+            rate = itemView.findViewById(R.id.rate);
+            headline = itemView.findViewById(R.id.headline);
+            location = itemView.findViewById(R.id.location);
+            listingImage = itemView.findViewById(R.id.thumbnail);
+
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Call interface method when view is clicked.
+         *
+         * @param v - view that was clicked
+         */
+        @Override
+        public void onClick(View v) {
+            if (clicklistener != null) {
+                clicklistener.itemClicked(v, getAdapterPosition());
+            }
         }
     }
 }
