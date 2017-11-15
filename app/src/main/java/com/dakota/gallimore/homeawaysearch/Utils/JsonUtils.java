@@ -340,7 +340,8 @@ public class JsonUtils {
 
         try {
             if (!imageType.equals(Constants.JSON_PHOTO_IMAGE_TYPE)) {
-                caption = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE).getString(Constants.JSON_CAPTION);
+                caption = checkNullAndReturnString(jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE),
+                        Constants.JSON_CAPTION);
                 unitNumber = checkNullAndReturnInt(jsonObject, Constants.JSON_UNIT_NUMBER);
                 jsonObject = jsonObject.getJSONObject(Constants.JSON_PHOTO_IMAGE_TYPE);
             } else {
