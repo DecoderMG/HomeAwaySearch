@@ -9,15 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.dakota.gallimore.homeawaysearch.LoginActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name="com.dakota.gallimore.homeawaysearch.MainActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -31,6 +30,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ListingActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

@@ -85,6 +85,7 @@ public class Constants {
     public static final String JSON_AD_CONTENT = "adContent";
 
     public static final String JSON_PHOTOS = "photos";
+    public static final String JSON_THUMBNAIL = "thumbnail";
     public static final String JSON_THUMBNAILS = "thumbnails";
     public static final String JSON_UNITS = "units";
 
@@ -110,4 +111,5 @@ public class Constants {
     public static final String JSON_FROM = "from";
 
     public static final String JSON_PRICE_QUOTE = "priceQuote";
+    public static final String JSON_PRICE_RANGES = "priceRanges";
 }
