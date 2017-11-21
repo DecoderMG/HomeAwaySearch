@@ -1,7 +1,5 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
-import java.net.URL;
-
 /**
  * Created by galli_000 on 11/6/2017.
  */
@@ -11,13 +9,13 @@ public class ListingMedia {
     private int height;
     private int width;
     private String imageType;
-    private URL Uri;
+    private String Uri;
     private int unitNumber;
 
     public ListingMedia() {
     }
 
-    public ListingMedia(String caption, int height, int width, String imageType, URL uri) {
+    public ListingMedia(String caption, int height, int width, String imageType, String uri) {
         this.caption = caption;
         this.height = height;
         this.width = width;
@@ -25,7 +23,7 @@ public class ListingMedia {
         Uri = uri;
     }
 
-    public ListingMedia(String caption, int height, int width, String imageType, URL uri, int unitNumber) {
+    public ListingMedia(String caption, int height, int width, String imageType, String uri, int unitNumber) {
         this.caption = caption;
         this.height = height;
         this.width = width;
@@ -66,11 +64,11 @@ public class ListingMedia {
         this.imageType = imageType;
     }
 
-    public URL getUri() {
+    public String getUri() {
         return Uri;
     }
 
-    public void setUri(URL uri) {
+    public void setUri(String uri) {
         Uri = uri;
     }
 

@@ -335,7 +335,7 @@ public class JsonUtils {
         String caption;
         int height = 0;
         int width = 0;
-        URL url = null;
+        String url = null;
         int unitNumber = 0;
 
         try {
@@ -352,7 +352,7 @@ public class JsonUtils {
                 JSONObject imageSpecs = jsonObject.getJSONObject(Constants.JSON_IMAGE_LARGE_SIZE);
                 height = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_HEIGHT);
                 width = imageSpecs.getJSONObject(Constants.JSON_DIMENSION).getInt(Constants.JSON_WIDTH);
-                url = new URL(imageSpecs.getString(Constants.JSON_URL));
+                url = checkNullAndReturnString(imageSpecs, Constants.JSON_URL);
             }
 
             return new ListingMedia(caption, height, width, imageType, url, unitNumber);
@@ -360,9 +360,6 @@ public class JsonUtils {
         } catch (JSONException e) {
             Log.d(Constants.JSON_LOG_TAG, e.getMessage());
             throw new JSONException("Invalid JSON data for Media type with error: " + e.getMessage());
-        } catch (MalformedURLException e) {
-            Log.d(Constants.JSON_LOG_TAG, e.getMessage());
-            throw new JSONException("Unable to parse image URI with error: " + e.getMessage());
         }
     }
 
