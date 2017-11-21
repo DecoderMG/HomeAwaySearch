@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
 import com.dakota.gallimore.homeawaysearch.R;
+import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
 
 import java.util.ArrayList;
 
@@ -44,9 +44,9 @@ public class ListingPhotosRecyclerAdapter extends RecyclerView.Adapter<ListingPh
             GlideUrl glideUrl = new GlideUrl(dataList.get(position).getUri(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken)
                     .build());
-            Glide.with(mContext).load(glideUrl).into(holder.image);
+            GlideApp.with(mContext).load(glideUrl).into(holder.image);
         } else {
-            Glide.with(mContext).load(dataList.get(position).getUri()).into(holder.image);
+            GlideApp.with(mContext).load(dataList.get(position).getUri()).into(holder.image);
         }
         holder.title.setText(dataList.get(position).getCaption());
     }

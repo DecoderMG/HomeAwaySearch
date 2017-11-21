@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
 import com.dakota.gallimore.homeawaysearch.R;
 import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
+import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
 
 import java.util.ArrayList;
 
@@ -62,9 +62,9 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
             GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnailUrl(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken).build());
 
-            Glide.with(mContext).load(glideUrl).into(holder.listingImage);
+            GlideApp.with(mContext).load(glideUrl).into(holder.listingImage);
         } else {
-            Glide.with(mContext).load(searchListing.getThumbnailUrl()).into(holder.listingImage);
+            GlideApp.with(mContext).load(searchListing.getThumbnailUrl()).into(holder.listingImage);
         }
         if (searchListing.getPriceRanges().size() > 1) {
             holder.rate.setText(searchListing.getPriceRange(0).getPeriodType());
