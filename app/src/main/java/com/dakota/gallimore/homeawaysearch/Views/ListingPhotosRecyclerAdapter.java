@@ -41,11 +41,12 @@ public class ListingPhotosRecyclerAdapter extends RecyclerView.Adapter<ListingPh
     @Override
     public void onBindViewHolder(final ListingPhotosViewHolder holder, int position) {
         if (accessToken != "") {
-            GlideUrl glideUrl = new GlideUrl(dataList.get(position).getUri().toString(), new LazyHeaders.Builder()
-                    .addHeader("Authorization", "Bearer " + accessToken).build());
+            GlideUrl glideUrl = new GlideUrl(dataList.get(position).getUri(), new LazyHeaders.Builder()
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .build());
             Glide.with(mContext).load(glideUrl).into(holder.image);
         } else {
-            //Glide.with(mContext).load(dataList.get(position).getUri()).into(holder.image);
+            Glide.with(mContext).load(dataList.get(position).getUri()).into(holder.image);
         }
         holder.title.setText(dataList.get(position).getCaption());
     }
