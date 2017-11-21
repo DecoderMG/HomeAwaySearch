@@ -361,7 +361,7 @@ public class ExampleUnitTest {
         assertEquals("sitting area with TV set", listingMedia.getCaption());
         assertEquals(663, listingMedia.getHeight());
         assertEquals(1000, listingMedia.getWidth());
-        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"),
+        assertEquals("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10",
                 listingMedia.getUri());
     }
 
@@ -403,7 +403,7 @@ public class ExampleUnitTest {
         assertEquals("sitting area with TV set", listingMedia.getCaption());
         assertEquals(663, listingMedia.getHeight());
         assertEquals(1000, listingMedia.getWidth());
-        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"),
+        assertEquals("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10",
                 listingMedia.getUri());
         assertEquals(2052470, listingMedia.getUnitNumber());
     }
@@ -818,10 +818,10 @@ public class ExampleUnitTest {
         assertEquals("HOMEAWAY_SE", listing.getSite(1).getRel());
 
         assertEquals("photo", listing.getPhoto(1).getImageType());
-        assertEquals(new URL("http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.10"), listing.getPhoto(1).getUri());
+        assertEquals("http://imagesus.homeaway.com/mda01/fc3d6fa9-f8d3-49de-af8e-1f01d06ad989.1.10", listing.getPhoto(1).getUri());
 
         assertEquals("thumbnail", listing.getPhoto(2).getImageType());
-        assertEquals(new URL("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10"), listing.getPhoto(2).getUri());
+        assertEquals("http://imagesus.homeaway.com/mda01/305eee9b-d1e5-492e-beda-6922a4e21f13.1.10", listing.getPhoto(2).getUri());
 
         assertEquals(2052470, listing.getUnit(0).getUnitNumber());
         assertEquals("METERS_SQUARED", listing.getUnit(0).getAreaUnit());
