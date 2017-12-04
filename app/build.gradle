@@ -42,4 +42,10 @@ dependencies {
     compile 'com.github.bumptech.glide:okhttp3-integration:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     testCompile 'org.json:json:20140107'
+
+    compile 'com.google.dagger:dagger:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    compile 'com.google.dagger:dagger-android:2.13'
+    compile 'com.google.dagger:dagger-android-support:2.13' // if you use the support libraries
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.13'
 }
