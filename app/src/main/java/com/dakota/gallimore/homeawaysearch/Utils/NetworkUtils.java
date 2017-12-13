@@ -1,15 +1,9 @@
 package com.dakota.gallimore.homeawaysearch.Utils;
 
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.Constants;
-
-import net.openid.appauth.AuthorizationServiceConfiguration;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +26,6 @@ import okhttp3.TlsVersion;
  */
 
 public class NetworkUtils {
-
-    private static JSONObject jsonObject;
 
     /**
      * Handles grabbing data from a specified URL using provided accessToken. Utilizes OkHttp asynchronous requests and will fire NetworkCallback when data is retrieved.
@@ -58,11 +50,7 @@ public class NetworkUtils {
             public void onFailure(Call call, final IOException e) {
                 final String exception = e.getMessage();
                 Log.d(Constants.NETWORK_LOG_TAG, exception);
-                try {
-                    networkCallback.onJsonObjectReturn(new JSONObject(""));
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
+                networkCallback.onJsonObjectReturn("");
             }
 
             @Override
@@ -71,11 +59,9 @@ public class NetworkUtils {
                     throw new IOException("Unexpected code " + response);
                 } else {
                     try {
-                        jsonObject = new JSONObject(response.body().string());
-                        networkCallback.onJsonObjectReturn(jsonObject);
-                        Log.d(Constants.NETWORK_LOG_TAG, response.body().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        String data = response.body().string();
+                        networkCallback.onJsonObjectReturn(data);
+                        Log.d(Constants.NETWORK_LOG_TAG, "OkHttp Response received ok");
                     } catch (NullPointerException npe) {
                         npe.printStackTrace();
                     }

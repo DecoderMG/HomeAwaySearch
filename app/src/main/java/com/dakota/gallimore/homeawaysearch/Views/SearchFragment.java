@@ -14,15 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
-import com.dakota.gallimore.homeawaysearch.DataClasses.User;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingSearchPaginator;
 import com.dakota.gallimore.homeawaysearch.ListingActivity;
 import com.dakota.gallimore.homeawaysearch.R;
 import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
 import com.dakota.gallimore.homeawaysearch.Utils.AuthUtils;
-import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkCallback;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkUtils;
+import com.google.gson.Gson;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -34,12 +33,7 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +50,7 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
     AuthorizationServiceConfiguration serviceConfig;
     JSONObject jsonReply;
     RecyclerView mRecyclerView;
-    ArrayList<SearchListing> searchListings;
+    ListingSearchPaginator searchListings;
     private OnFragmentInteractionListener mListener;
 
     // TODO: Update Search UI to have a better looking search bar
@@ -160,9 +154,9 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
                                     return;
                                 }
 
-                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search?q=austin&minPrice=100.0&availabilityEnd=2016-05-04&availabilityStart=2016-04-22&pageSize=1&locale=en&refine=Sleeps:1", authState.getAccessToken(), new NetworkCallback() {
+                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search", authState.getAccessToken(), new NetworkCallback() {
                                     @Override
-                                    public void onJsonObjectReturn(JSONObject jsonObject) {
+                                    public void onJsonObjectReturn(String jsonObject) {
                                         displayJsonListings(jsonObject);
                                     }
                                 });
@@ -184,7 +178,7 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
 
             NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search", authState.getAccessToken(), new NetworkCallback() {
                 @Override
-                public void onJsonObjectReturn(JSONObject jsonObject) {
+                public void onJsonObjectReturn(String jsonObject) {
                     displayJsonListings(jsonObject);
                 }
             });
@@ -214,37 +208,22 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
      *
      * @param jsonObject - JSONObject containing HomeAway search results
      */
-    private void displayJsonListings(JSONObject jsonObject) {
-        jsonReply = jsonObject;
-        if (jsonReply != null) {
+    private void displayJsonListings(String jsonObject) {
+
+        Log.d(this.getClass().getSimpleName(), jsonObject);
+        searchListings = new Gson().fromJson(jsonObject, ListingSearchPaginator.class);
+        if (searchListings != null) {
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    User user = null;
-                    try {
-                        searchListings = new ArrayList<>();
-                        JSONArray entries = jsonReply.getJSONArray("entries");
-                        for (int i = 0; i < entries.length(); i++) {
-                            searchListings.add(JsonUtils.parseSearchListingJson(entries.getJSONObject(i)));
-                        }
-                        ListingRecyclerAdapter mAdapter = new ListingRecyclerAdapter(getContext(),
-                                searchListings,
-                                authState.getAccessToken());
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-                        LinearLayoutManager layoutManager =
-                                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-                        mRecyclerView.setLayoutManager(gridLayoutManager);
-                        mRecyclerView.setAdapter(mAdapter);
-                        mAdapter.setClickListener(SearchFragment.this);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
+                    ListingRecyclerAdapter mAdapter = new ListingRecyclerAdapter(getContext(),
+                            searchListings.getEntries(),
+                            authState.getAccessToken());
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                    mRecyclerView.setLayoutManager(gridLayoutManager);
+                    mRecyclerView.setAdapter(mAdapter);
+                    mAdapter.setClickListener(SearchFragment.this);
                 }
             });
 
@@ -252,7 +231,6 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
             //TODO: Handle null reply from HomeAway
         }
     }
-
     /**
      * Handle OnClick from RecyclerView
      *
@@ -262,7 +240,7 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
     @Override
     public void itemClicked(View view, int position) {
         Intent intent = new Intent(getContext(), ListingActivity.class);
-        intent.putExtra("SearchListing", searchListings.get(position));
+        intent.putExtra("SearchListing", searchListings.getEntries().get(position));
         startActivity(intent);
     }
 

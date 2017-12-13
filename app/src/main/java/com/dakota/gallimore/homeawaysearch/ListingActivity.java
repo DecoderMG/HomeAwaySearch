@@ -1,6 +1,7 @@
 package com.dakota.gallimore.homeawaysearch;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -14,17 +15,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.dakota.gallimore.homeawaysearch.DataClasses.Listing;
-import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
-import com.dakota.gallimore.homeawaysearch.DataClasses.Location;
-import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingAdPhoto;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingLocation;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingSearchHit;
 import com.dakota.gallimore.homeawaysearch.Utils.AuthUtils;
-import com.dakota.gallimore.homeawaysearch.Utils.JsonUtils;
+import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkCallback;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkUtils;
 import com.dakota.gallimore.homeawaysearch.Views.ListingPhotosRecyclerAdapter;
+import com.google.gson.Gson;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -36,10 +42,8 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ListingActivity extends AppCompatActivity {
 
@@ -112,16 +116,16 @@ public class ListingActivity extends AppCompatActivity {
         }
 
         if (getIntent() != null && getIntent().hasExtra("SearchListing")) {
-            SearchListing searchListing = (SearchListing) getIntent().getSerializableExtra("SearchListing");
-            Location location = searchListing.getLocation();
+            ListingSearchHit searchListing = (ListingSearchHit) getIntent().getSerializableExtra("SearchListing");
+            ListingLocation listingLocation = searchListing.getLocation();
 
             headline.setText(searchListing.getHeadline());
-            this.location.setText(location.getCity() + ", " + location.getState() + ", " +
-                    location.getCountry());
+            this.location.setText(listingLocation.getCity() + ", " + listingLocation.getState() + ", " +
+                    listingLocation.getCountry());
             description.setText(searchListing.getDescription());
             listingUrl = searchListing.getDetailsUrl().toString();
 
-            Glide.with(this).load(searchListing.getThumbnailUrl()).into(featuredImage);
+            Glide.with(this).load(searchListing.getThumbnail().getUri()).into(featuredImage);
         }
     }
 
@@ -164,8 +168,8 @@ public class ListingActivity extends AppCompatActivity {
                                 if (checkListingUrl(listingUrl)) {
                                     NetworkUtils.getHomeAwayJsonData(listingUrl, authState.getAccessToken(), new NetworkCallback() {
                                         @Override
-                                        public void onJsonObjectReturn(JSONObject jsonObject) {
-                                            displayJsonListing(jsonObject);
+                                        public void onJsonObjectReturn(String jsonObject) {
+                                            displayJsonListingWithGson(jsonObject);
                                         }
                                     });
                                 }
@@ -175,14 +179,12 @@ public class ListingActivity extends AppCompatActivity {
 
                     } else {
                         Log.d("Search Frag", "Access Token Failure");
-                        //tv.setText("Access Token Failure");
                     }
                 }
             });
         } else if (ex == null) {
 
             authState = AuthUtils.readAuthState(this);
-            //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
 
             if (checkListingUrl(listingUrl)) {
                 Log.d("Listing Activity: ", listingUrl);
@@ -193,8 +195,8 @@ public class ListingActivity extends AppCompatActivity {
                 Log.d("Listing Activity: ", urlBuilder.toString());
                 NetworkUtils.getHomeAwayJsonData(urlBuilder.toString(), authState.getAccessToken(), new NetworkCallback() {
                     @Override
-                    public void onJsonObjectReturn(JSONObject jsonObject) {
-                        displayJsonListing(jsonObject);
+                    public void onJsonObjectReturn(String jsonObject) {
+                        displayJsonListingWithGson(jsonObject);
                     }
                 });
             }
@@ -205,38 +207,45 @@ public class ListingActivity extends AppCompatActivity {
         return !(url.isEmpty() || url == null || url.equals(""));
     }
 
-    private void displayJsonListing(JSONObject jsonObject) {
-        try {
-            listing = JsonUtils.parseListingJson(jsonObject);
-
-            this.runOnUiThread(new Runnable() {
+    private void displayJsonListingWithGson(String data) {
+        listing = new Gson().fromJson(data, Listing.class);
+        GlideApp.get(this).clearDiskCache();
+        runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GlideUrl glideUrl = new GlideUrl(listing.getPhoto(0).getUri(), new LazyHeaders.Builder()
+                    Glide.get(mContext).clearMemory();
+                    GlideUrl glideUrl = new GlideUrl(listing.getPhotos().getPhotos().get(0).getLarge().getUrl(), new LazyHeaders.Builder()
                             .addHeader("Authorization", "Bearer " + authState.getAccessToken()).build());
 
-                    Log.d("Glide Debug", glideUrl.toStringUrl());
-                    //Glide.with(ListingActivity.this).load("https://imagesus.homeaway.com/mda01/83f65519-5dfc-402a-8fea-d5e74bf0d19e.1.10").into(featuredImage);
-                    ArrayList<ListingMedia> photos = new ArrayList<>();
-                    for (int i = 0; i < listing.getPhotos().size(); i++) {
-                        if (listing.getPhoto(i).getImageType().equals("photo")) {
-                            photos.add(listing.getPhoto(i));
-                        } else {
-                            break;
+                    Glide.with(mContext).load(glideUrl).listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            Log.d("GLIDE", String.format(Locale.ROOT,
+                                    "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+                            return false;
                         }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.d("GLIDE", String.format(Locale.ROOT,
+                                    "onResourceReady(%s, %s, %s, %s)", resource, model, target, isFirstResource));
+
+                            return false;
+                        }
+                    }).into(featuredImage);
+
+                    Log.d("Glide Debug", glideUrl.toStringUrl());
+                    ArrayList<ListingAdPhoto> photos = new ArrayList<>();
+                    for (int i = 0; i < listing.getPhotos().getPhotos().size(); i++) {
+                        photos.add(listing.getPhotos().getPhotos().get(i));
                     }
 
-                    description.setText(listing.getDescription());
-                    imageCounter.setText(listing.getPhotos().size() + " Photos");
+                    description.setText(listing.getAdContent().getDescription());
+                    imageCounter.setText(listing.getPhotos().getPhotos().size() + " Photos");
                     ListingPhotosRecyclerAdapter photosRecyclerAdapter = new
                             ListingPhotosRecyclerAdapter(mContext, photos, authState.getAccessToken());
                     photosRecyclerView.setAdapter(photosRecyclerAdapter);
                 }
             });
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

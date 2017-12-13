@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.dakota.gallimore.homeawaysearch.DataClasses.SearchListing;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingSearchHit;
 import com.dakota.gallimore.homeawaysearch.R;
 import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
 import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
@@ -25,18 +25,18 @@ import java.util.ArrayList;
 public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecyclerAdapter.ListingViewHolder> {
 
     Context mContext;
-    ArrayList<SearchListing> data = new ArrayList<>();
+    ArrayList<ListingSearchHit> data = new ArrayList<>();
     String accessToken;
     private AdapterClickListener clicklistener = null;
 
-    public ListingRecyclerAdapter(Context context, ArrayList<SearchListing> data) {
+    public ListingRecyclerAdapter(Context context, ArrayList<ListingSearchHit> data) {
         super();
         mContext = context;
         this.data = data;
         accessToken = "";
     }
 
-    public ListingRecyclerAdapter(Context context, ArrayList<SearchListing> data, String accessToken) {
+    public ListingRecyclerAdapter(Context context, ArrayList<ListingSearchHit> data, String accessToken) {
         super();
         mContext = context;
         this.data = data;
@@ -52,24 +52,27 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
 
     @Override
     public void onBindViewHolder(ListingViewHolder holder, final int position) {
-        SearchListing searchListing = data.get(position);
-
+        ListingSearchHit searchListing = data.get(position);
         holder.headline.setText(searchListing.getHeadline());
-        holder.rate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
+        if (searchListing.getPriceQuote() != null) {
+            holder.rate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
+        }
 
         // Make sure we have the access token and use ti to access restricted HomeAway data.
         if (accessToken != "") {
-            GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnailUrl(), new LazyHeaders.Builder()
+            GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnail().getUri(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken).build());
 
             GlideApp.with(mContext).load(glideUrl).into(holder.listingImage);
         } else {
-            GlideApp.with(mContext).load(searchListing.getThumbnailUrl()).into(holder.listingImage);
+            GlideApp.with(mContext).load(searchListing.getThumbnail().getUri()).into(holder.listingImage);
         }
         if (searchListing.getPriceRanges().size() > 1) {
-            holder.rate.setText(searchListing.getPriceRange(0).getPeriodType());
+            holder.rate.setText(searchListing.getPriceRanges().get(0).getPeriodType());
         }
-        holder.location.setText(searchListing.getLocation().getCity() + ", " + searchListing.getLocation().getState() + " " + searchListing.getLocation().getCountry());
+        holder.location.setText(searchListing.getLocation().getCity() + ", "
+                + searchListing.getLocation().getState() + " "
+                + searchListing.getLocation().getCountry());
     }
 
     /**
@@ -98,7 +101,7 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
 
             rate = itemView.findViewById(R.id.rate);
             headline = itemView.findViewById(R.id.headline);
-            location = itemView.findViewById(R.id.location);
+            location = itemView.findViewById(R.id.listingLocation);
             listingImage = itemView.findViewById(R.id.thumbnail);
 
             itemView.setOnClickListener(this);

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
-import com.dakota.gallimore.homeawaysearch.DataClasses.ListingMedia;
+import com.dakota.gallimore.homeawaysearch.DataClasses.ListingAdPhoto;
 import com.dakota.gallimore.homeawaysearch.R;
 import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
 
@@ -21,11 +21,11 @@ import java.util.ArrayList;
  */
 
 public class ListingPhotosRecyclerAdapter extends RecyclerView.Adapter<ListingPhotosRecyclerAdapter.ListingPhotosViewHolder> {
-    private static ArrayList<ListingMedia> dataList;
+    private static ArrayList<ListingAdPhoto> dataList;
     private Context mContext;
     private String accessToken;
 
-    public ListingPhotosRecyclerAdapter(Context context, ArrayList<ListingMedia> media, String accessToken) {
+    public ListingPhotosRecyclerAdapter(Context context, ArrayList<ListingAdPhoto> media, String accessToken) {
         this.mContext = context;
         dataList = media;
         this.accessToken = accessToken;
@@ -41,12 +41,12 @@ public class ListingPhotosRecyclerAdapter extends RecyclerView.Adapter<ListingPh
     @Override
     public void onBindViewHolder(final ListingPhotosViewHolder holder, int position) {
         if (accessToken != "") {
-            GlideUrl glideUrl = new GlideUrl(dataList.get(position).getUri(), new LazyHeaders.Builder()
+            GlideUrl glideUrl = new GlideUrl(dataList.get(position).getMedium().getUrl(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken)
                     .build());
             GlideApp.with(mContext).load(glideUrl).into(holder.image);
         } else {
-            GlideApp.with(mContext).load(dataList.get(position).getUri()).into(holder.image);
+            GlideApp.with(mContext).load(dataList.get(position).getMedium().getUrl()).into(holder.image);
         }
         holder.title.setText(dataList.get(position).getCaption());
     }
