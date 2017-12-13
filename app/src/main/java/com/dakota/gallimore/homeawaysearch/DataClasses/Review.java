@@ -1,19 +1,37 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by galli_000 on 11/3/2017.
  * Class that holds review data for units.
  */
 
-public class Review {
+public class Review implements Serializable {
 
+    @SerializedName("arrivalDate")
+    @Expose
     private String arrivalDate;
+    @SerializedName("reviewerName")
+    @Expose
     private String reviewerName;
+    @SerializedName("body")
+    @Expose
     private String body;
+    @SerializedName("headline")
+    @Expose
     private String headline;
+    @SerializedName("helpfulCount")
+    @Expose
     private int helpfulCount;
+    @SerializedName("unhelpfulCount")
+    @Expose
     private int unhelpfulCount;
-    private double rating;
+    @SerializedName("reviewLocales")
+    @Expose
     private String reviewLocale;
 
     public Review() {
@@ -78,14 +96,6 @@ public class Review {
 
     public void setUnhelpfulCount(int unhelpfulCount) {
         this.unhelpfulCount = unhelpfulCount;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public String getReviewLocale() {

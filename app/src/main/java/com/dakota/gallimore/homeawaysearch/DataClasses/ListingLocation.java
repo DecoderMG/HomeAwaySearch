@@ -1,5 +1,8 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,15 +10,25 @@ import java.io.Serializable;
  * Class containing location data for listings
  */
 
-public class Location implements Serializable {
+public class ListingLocation implements Serializable {
 
+    @SerializedName("lat")
+    @Expose
     private double latitude;
+    @SerializedName("lng")
+    @Expose
     private double longitude;
+    @SerializedName("city")
+    @Expose
     private String city;
+    @SerializedName("state")
+    @Expose
     private String state;
+    @SerializedName("country")
+    @Expose
     private String country;
 
-    public Location() {
+    public ListingLocation() {
         latitude = 0.0;
         longitude = 0.0;
         city = "";
@@ -23,8 +36,8 @@ public class Location implements Serializable {
         country = "";
     }
 
-    public Location(double latitude, double longitude, String city,
-                    String state, String country) {
+    public ListingLocation(double latitude, double longitude, String city,
+                           String state, String country) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.city = city;

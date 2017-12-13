@@ -1,22 +1,33 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
  * Created by galli_000 on 11/10/2017.
  */
 
-public class PriceRange implements Serializable {
+public class PriceRangeBean implements Serializable {
 
+    @SerializedName("to")
+    @Expose
     private double to;
+    @SerializedName("currencyUnits")
+    @Expose
     private String currencyUnits;
+    @SerializedName("periodType")
+    @Expose
     private String periodType;
+    @SerializedName("from")
+    @Expose
     private double from;
 
-    public PriceRange() {
+    public PriceRangeBean() {
     }
 
-    public PriceRange(double to, String currencyUnits, String periodType, double from) {
+    public PriceRangeBean(double to, String currencyUnits, String periodType, double from) {
         this.to = to;
         this.currencyUnits = currencyUnits;
         this.periodType = periodType;

@@ -1,21 +1,34 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by galli_000 on 11/3/2017.
  * Class containing information about a listing or rooms unique feature. (I.E: Washer and Dryer Connections)
  */
 
-public class Feature {
+public class ListingAdFeature implements Serializable {
 
+    @SerializedName("count")
+    @Expose
     private int count;
+    @SerializedName("category")
+    @Expose
     private String category;
+    @SerializedName("description")
+    @Expose
     private String description;
+    @SerializedName("localizedName")
+    @Expose
     private String localizedName;
 
-    public Feature() {
+    public ListingAdFeature() {
     }
 
-    public Feature(int count, String category, String description, String localizedName) {
+    public ListingAdFeature(int count, String category, String description, String localizedName) {
         this.count = count;
         this.category = category;
         this.description = description;

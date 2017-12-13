@@ -3,7 +3,10 @@ package com.dakota.gallimore.homeawaysearch.DataClasses;
 import android.util.Log;
 
 import com.dakota.gallimore.homeawaysearch.Constants;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,34 +14,56 @@ import java.util.ArrayList;
  * Class containing all information relating to a HomeAway listing
  */
 
-public class Listing {
+public class Listing implements Serializable {
+
+    @SerializedName("listingId")
+    @Expose
     private String listingId;
+
+    @SerializedName("listingUrl")
+    @Expose
     private String listingUrl;
+    @SerializedName("sourceLocale")
+    @Expose
     private String sourceLocale;
+    @SerializedName("sourceLocaleName")
+    @Expose
     private String sourceLocaleName;
-    private String description; // Done
-    private String headline; // Done
-    private ArrayList<Feature> features;
-    private Location location;
-    private ArrayList<Site> sites;
-    private ArrayList<ListingMedia> photos;
+    @SerializedName("adContent")
+    @Expose
+    private AdContent adContent;
+
+    @SerializedName("listingAdFeatures")
+    @Expose
+    private ArrayList<ListingAdFeature> listingAdFeatures;
+    @SerializedName("listingLocation")
+    @Expose
+    private ListingLocation listingLocation;
+    @SerializedName("sites")
+    @Expose
+    private ArrayList<Link> sites;
+    @SerializedName("photos")
+    @Expose
+    private ListingMedia photos;
+
+    @SerializedName("units")
+    @Expose
     private ArrayList<Unit> units;
 
     public Listing() {
     }
 
     public Listing(String listingId, String listingUrl, String sourceLocale,
-                   String sourceLocaleName, String description, String headline,
-                   ArrayList<Feature> features, Location location, ArrayList<Site> sites,
-                   ArrayList<ListingMedia> photos, ArrayList<Unit> units) {
+                   String sourceLocaleName, AdContent adContent,
+                   ArrayList<ListingAdFeature> listingAdFeatures, ListingLocation listingLocation, ArrayList<Link> sites,
+                   ListingMedia photos, ArrayList<Unit> units) {
         this.listingId = listingId;
         this.listingUrl = listingUrl;
         this.sourceLocale = sourceLocale;
         this.sourceLocaleName = sourceLocaleName;
-        this.description = description;
-        this.headline = headline;
-        this.features = features;
-        this.location = location;
+        this.adContent = adContent;
+        this.listingAdFeatures = listingAdFeatures;
+        this.listingLocation = listingLocation;
         this.sites = sites;
         this.photos = photos;
         this.units = units;
@@ -76,88 +101,80 @@ public class Listing {
         this.sourceLocaleName = sourceLocaleName;
     }
 
-    public String getDescription() {
-        return description;
+    public AdContent getAdContent() {
+        return adContent;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAdContent(AdContent adContent) {
+        this.adContent = adContent;
     }
 
-    public String getHeadline() {
-        return headline;
+    public ArrayList<ListingAdFeature> getListingAdFeatures() {
+        return listingAdFeatures;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
+    public void setListingAdFeatures(ArrayList<ListingAdFeature> listingAdFeatures) {
+        this.listingAdFeatures = listingAdFeatures;
     }
 
-    public ArrayList<Feature> getFeatures() {
-        return features;
-    }
-
-    public void setFeatures(ArrayList<Feature> features) {
-        this.features = features;
-    }
-
-    public void addFeature(Feature feature) {
-        if (feature != null) {
-            this.features.add(feature);
+    public void addFeature(ListingAdFeature listingAdFeature) {
+        if (listingAdFeature != null) {
+            this.listingAdFeatures.add(listingAdFeature);
         } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Can not add null feature");
+            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Can not add null listingAdFeature");
         }
     }
 
-    public void removeFeature(Feature feature) {
-        if (feature != null && this.features.contains(feature)) {
-            this.features.remove(feature);
+    public void removeFeature(ListingAdFeature listingAdFeature) {
+        if (listingAdFeature != null && this.listingAdFeatures.contains(listingAdFeature)) {
+            this.listingAdFeatures.remove(listingAdFeature);
         } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Feature not associated with Listing");
+            Log.d(Constants.LISTING_CLASS_LOG_TAG, "ListingAdFeature not associated with Listing");
         }
     }
 
-    public Feature getFeature(int i) {
-        if (i < this.features.size()) {
-            return this.features.get(i);
+    public ListingAdFeature getFeature(int i) {
+        if (i < this.listingAdFeatures.size()) {
+            return this.listingAdFeatures.get(i);
         } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Error: attempting to get feature outside of Feature array");
+            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Error: attempting to get feature outside of ListingAdFeature array");
             return null;
         }
     }
 
-    public Location getLocation() {
-        return location;
+    public ListingLocation getListingLocation() {
+        return listingLocation;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setListingLocation(ListingLocation listingLocation) {
+        this.listingLocation = listingLocation;
     }
 
-    public ArrayList<Site> getSites() {
+    public ArrayList<Link> getSites() {
         return sites;
     }
 
-    public void setSites(ArrayList<Site> sites) {
+    public void setSites(ArrayList<Link> sites) {
         this.sites = sites;
     }
 
-    public void addSite(Site site) {
-        if (site != null) {
-            this.sites.add(site);
+    public void addSite(Link link) {
+        if (link != null) {
+            this.sites.add(link);
         } else {
             Log.d(Constants.LISTING_CLASS_LOG_TAG, "Can not add null Site");
         }
     }
 
-    public void removeSite(Site site) {
-        if (site != null && this.sites.contains(site)) {
-            this.sites.remove(site);
+    public void removeSite(Link link) {
+        if (link != null && this.sites.contains(link)) {
+            this.sites.remove(link);
         } else {
             Log.d(Constants.LISTING_CLASS_LOG_TAG, "Site not associated with Listing");
         }
     }
 
-    public Site getSite(int i) {
+    public Link getSite(int i) {
         if (i < this.sites.size()) {
             return this.sites.get(i);
         } else {
@@ -166,37 +183,12 @@ public class Listing {
         }
     }
 
-    public ArrayList<ListingMedia> getPhotos() {
+    public ListingMedia getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<ListingMedia> photos) {
+    public void setPhotos(ListingMedia photos) {
         this.photos = photos;
-    }
-
-    public void addPhoto(ListingMedia listingMedia) {
-        if (listingMedia != null) {
-            this.photos.add(listingMedia);
-        } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Can not add null photo, check ListingMedia");
-        }
-    }
-
-    public void removePhoto(ListingMedia listingMedia) {
-        if (listingMedia != null && this.photos.contains(listingMedia)) {
-            this.photos.remove(listingMedia);
-        } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Listing photo not associated with Listing");
-        }
-    }
-
-    public ListingMedia getPhoto(int i) {
-        if (i < this.photos.size()) {
-            return this.photos.get(i);
-        } else {
-            Log.d(Constants.LISTING_CLASS_LOG_TAG, "Error: attempting to get listing media outside of Photo array");
-            return null;
-        }
     }
 
     public ArrayList<Unit> getUnits() {

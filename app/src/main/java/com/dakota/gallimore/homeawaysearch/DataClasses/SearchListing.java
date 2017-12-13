@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 
 public class SearchListing implements Serializable {
-    ArrayList<PriceRange> priceRanges;
+    ArrayList<PriceRangeBean> priceRangeBeans;
     private String headline;
     private String accommodations;
-    private Location location;
+    private ListingLocation listingLocation;
     private double bathrooms;
     private double bedrooms;
     private URL detailsUrl;
@@ -31,7 +31,7 @@ public class SearchListing implements Serializable {
     public SearchListing() {
     }
 
-    public SearchListing(String headline, String accommodations, Location location,
+    public SearchListing(String headline, String accommodations, ListingLocation listingLocation,
                          double bathrooms, double bedrooms,
                          URL detailsUrl, boolean bookWithConfidence,
                          String listingId, String thumbnailUrl, String description,
@@ -39,7 +39,7 @@ public class SearchListing implements Serializable {
                          double reviewAverage, PriceQuote priceQuote) {
         this.headline = headline;
         this.accommodations = accommodations;
-        this.location = location;
+        this.listingLocation = listingLocation;
         this.bathrooms = bathrooms;
         this.bedrooms = bedrooms;
         this.detailsUrl = detailsUrl;
@@ -54,15 +54,15 @@ public class SearchListing implements Serializable {
         this.priceQuote = priceQuote;
     }
 
-    public SearchListing(String headline, String accommodations, Location location,
+    public SearchListing(String headline, String accommodations, ListingLocation listingLocation,
                          double bathrooms, double bedrooms, URL detailsUrl,
                          boolean bookWithConfidence, String listingId, String thumbnailUrl,
                          String description, int reviewCount, String listingSource,
-                         String listingUrl, double reviewAverage, ArrayList<PriceRange> priceRanges,
+                         String listingUrl, double reviewAverage, ArrayList<PriceRangeBean> priceRangeBeans,
                          PriceQuote priceQuote) {
         this.headline = headline;
         this.accommodations = accommodations;
-        this.location = location;
+        this.listingLocation = listingLocation;
         this.bathrooms = bathrooms;
         this.bedrooms = bedrooms;
         this.detailsUrl = detailsUrl;
@@ -74,7 +74,7 @@ public class SearchListing implements Serializable {
         this.listingSource = listingSource;
         this.listingUrl = listingUrl;
         this.reviewAverage = reviewAverage;
-        this.priceRanges = priceRanges;
+        this.priceRangeBeans = priceRangeBeans;
         this.priceQuote = priceQuote;
     }
 
@@ -94,12 +94,12 @@ public class SearchListing implements Serializable {
         this.accommodations = accommodations;
     }
 
-    public Location getLocation() {
-        return location;
+    public ListingLocation getListingLocation() {
+        return listingLocation;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setListingLocation(ListingLocation listingLocation) {
+        this.listingLocation = listingLocation;
     }
 
     public double getBathrooms() {
@@ -190,33 +190,33 @@ public class SearchListing implements Serializable {
         this.reviewAverage = reviewAverage;
     }
 
-    public ArrayList<PriceRange> getPriceRanges() {
-        return priceRanges;
+    public ArrayList<PriceRangeBean> getPriceRangeBeans() {
+        return priceRangeBeans;
     }
 
-    public void setPriceRanges(ArrayList<PriceRange> priceRanges) {
-        this.priceRanges = priceRanges;
+    public void setPriceRangeBeans(ArrayList<PriceRangeBean> priceRangeBeans) {
+        this.priceRangeBeans = priceRangeBeans;
     }
 
-    public void addPriceRange(PriceRange priceRange) {
-        if (priceRange != null) {
-            priceRanges.add(priceRange);
+    public void addPriceRange(PriceRangeBean priceRangeBean) {
+        if (priceRangeBean != null) {
+            priceRangeBeans.add(priceRangeBean);
         } else {
             Log.d("Search Listing Log: ", "Unable to add null Price Range to Search Listing");
         }
     }
 
-    public void removePriceRange(PriceRange priceRange) {
-        if (priceRange != null && priceRanges.contains(priceRange)) {
-            priceRanges.remove(priceRange);
+    public void removePriceRange(PriceRangeBean priceRangeBean) {
+        if (priceRangeBean != null && priceRangeBeans.contains(priceRangeBean)) {
+            priceRangeBeans.remove(priceRangeBean);
         } else {
             Log.d("Search Listing Log: ", "Price range is either null or not associated with Search Listing");
         }
     }
 
-    public PriceRange getPriceRange(int i) {
-        if (i < priceRanges.size()) {
-            return priceRanges.get(i);
+    public PriceRangeBean getPriceRange(int i) {
+        if (i < priceRangeBeans.size()) {
+            return priceRangeBeans.get(i);
         } else {
             Log.d("Search Listing Log: ", "Error: Attempting to get price range outside the index of the Search Listing Price Ranges");
             return null;

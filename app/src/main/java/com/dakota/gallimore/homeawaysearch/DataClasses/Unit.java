@@ -1,27 +1,96 @@
 package com.dakota.gallimore.homeawaysearch.DataClasses;
 
-import android.util.Log;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-import com.dakota.gallimore.homeawaysearch.Constants;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by galli_000 on 11/3/2017.
  * Class containing all information relating to a Unit of a Homeaway listing
  */
 
-public class Unit {
+public class Unit implements Serializable {
 
+    @SerializedName("unitNumber")
+    @Expose
     private int unitNumber;
+
+    @SerializedName("ratePeriods")
+    @Expose
+    private ArrayList<ListingUnitRatePeriod> ratePeriods;
+
+    @SerializedName("reviewSummary")
+    @Expose
+    private ListingUnitReviewSummary reviewSummary;
+
+    @SerializedName("unitAvailability")
+    @Expose
+    private ListingUnitAvailability unitAvailability;
+
+    @SerializedName("unitContent")
+    @Expose
+    private UnitContent unitContent;
+
+    public Unit() {
+    }
+
+    public Unit(int unitNumber, ArrayList<ListingUnitRatePeriod> ratePeriods, ListingUnitReviewSummary reviewSummary, ListingUnitAvailability unitAvailability, UnitContent unitContent) {
+        this.unitNumber = unitNumber;
+        this.ratePeriods = ratePeriods;
+        this.reviewSummary = reviewSummary;
+        this.unitAvailability = unitAvailability;
+        this.unitContent = unitContent;
+    }
+
+    public int getUnitNumber() {
+        return unitNumber;
+    }
+
+    public void setUnitNumber(int unitNumber) {
+        this.unitNumber = unitNumber;
+    }
+
+    public ArrayList<ListingUnitRatePeriod> getRatePeriods() {
+        return ratePeriods;
+    }
+
+    public void setRatePeriods(ArrayList<ListingUnitRatePeriod> ratePeriods) {
+        this.ratePeriods = ratePeriods;
+    }
+
+    public ListingUnitReviewSummary getReviewSummary() {
+        return reviewSummary;
+    }
+
+    public void setReviewSummary(ListingUnitReviewSummary reviewSummary) {
+        this.reviewSummary = reviewSummary;
+    }
+
+    public ListingUnitAvailability getUnitAvailability() {
+        return unitAvailability;
+    }
+
+    public void setUnitAvailability(ListingUnitAvailability unitAvailability) {
+        this.unitAvailability = unitAvailability;
+    }
+
+    public UnitContent getUnitContent() {
+        return unitContent;
+    }
+
+    public void setUnitContent(UnitContent unitContent) {
+        this.unitContent = unitContent;
+    }
+
+    /*
     private int unitArea;
     private String areaUnit;
 
-    private ArrayList<Feature> features;
+    private ArrayList<ListingAdFeature> listingAdFeatures;
     private ArrayList<Review> reviews;
-    private ArrayList<Room> rooms;
-    private ArrayList<RatePeriod> ratePeriods;
+    private ArrayList<ListingAdRoom> listingAdRooms;
 
     private int maxSleep;
     private int maxSleepInBeds;
@@ -50,22 +119,22 @@ public class Unit {
 
 
     public Unit() {
-        features = new ArrayList<>();
+        listingAdFeatures = new ArrayList<>();
         reviews = new ArrayList<>();
-        rooms = new ArrayList<>();
+        listingAdRooms = new ArrayList<>();
     }
 
     public Unit(int unitNumber, int unitArea, String areaUnit,
-                ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
+                ArrayList<ListingAdFeature> listingAdFeatures, ArrayList<Review> reviews, ArrayList<ListingAdRoom> listingAdRooms,
                 ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 int numOfBathrooms, int numOfBedrooms, String propertyType,
                 int numOfRatings, int[] numOfReviewRatings) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
         this.areaUnit = areaUnit;
-        this.features = features;
+        this.listingAdFeatures = listingAdFeatures;
         this.reviews = reviews;
-        this.rooms = rooms;
+        this.listingAdRooms = listingAdRooms;
         this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
@@ -77,15 +146,15 @@ public class Unit {
     }
 
     public Unit(int unitNumber, int unitArea, String areaUnit,
-                ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
+                ArrayList<ListingAdFeature> listingAdFeatures, ArrayList<Review> reviews, ArrayList<ListingAdRoom> listingAdRooms,
                 ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 int numOfBathrooms, int numOfBedrooms, String propertyType) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
         this.areaUnit = areaUnit;
-        this.features = features;
+        this.listingAdFeatures = listingAdFeatures;
         this.reviews = reviews;
-        this.rooms = rooms;
+        this.listingAdRooms = listingAdRooms;
         this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
@@ -97,15 +166,15 @@ public class Unit {
     }
 
     public Unit(int unitNumber, int unitArea, String areaUnit,
-                ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms,
+                ArrayList<ListingAdFeature> listingAdFeatures, ArrayList<Review> reviews, ArrayList<ListingAdRoom> listingAdRooms,
                 ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds,
                 String propertyType) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
         this.areaUnit = areaUnit;
-        this.features = features;
+        this.listingAdFeatures = listingAdFeatures;
         this.reviews = reviews;
-        this.rooms = rooms;
+        this.listingAdRooms = listingAdRooms;
         this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
@@ -116,13 +185,13 @@ public class Unit {
         updateReviewScore();
     }
 
-    public Unit(int unitNumber, int unitArea, String areaUnit, ArrayList<Feature> features, ArrayList<Review> reviews, ArrayList<Room> rooms, ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds, int numOfBathrooms, int numOfBedrooms, String propertyType, int numOfRatings, double averageReviewScore, int[] numOfReviewRatings, String availabilityDefault, String changeOverDefault, Date dateRangeBegin, Date dateRangeEnd, int maxStayDefault, int minPriorNotifyDefault, int minStayDefault, String stayIncrementDefault, String availability, int availableUnitCount, String changeOver, int[] maxStay, int[] minPriorNotify, int[] minStay, String stayIncrement) {
+    public Unit(int unitNumber, int unitArea, String areaUnit, ArrayList<ListingAdFeature> listingAdFeatures, ArrayList<Review> reviews, ArrayList<ListingAdRoom> listingAdRooms, ArrayList<RatePeriod> ratePeriods, int maxSleep, int maxSleepInBeds, int numOfBathrooms, int numOfBedrooms, String propertyType, int numOfRatings, double averageReviewScore, int[] numOfReviewRatings, String availabilityDefault, String changeOverDefault, Date dateRangeBegin, Date dateRangeEnd, int maxStayDefault, int minPriorNotifyDefault, int minStayDefault, String stayIncrementDefault, String availability, int availableUnitCount, String changeOver, int[] maxStay, int[] minPriorNotify, int[] minStay, String stayIncrement) {
         this.unitNumber = unitNumber;
         this.unitArea = unitArea;
         this.areaUnit = areaUnit;
-        this.features = features;
+        this.listingAdFeatures = listingAdFeatures;
         this.reviews = reviews;
-        this.rooms = rooms;
+        this.listingAdRooms = listingAdRooms;
         this.ratePeriods = ratePeriods;
         this.maxSleep = maxSleep;
         this.maxSleepInBeds = maxSleepInBeds;
@@ -173,32 +242,32 @@ public class Unit {
         this.areaUnit = areaUnit;
     }
 
-    public ArrayList<Feature> getFeatures() {
-        return features;
+    public ArrayList<ListingAdFeature> getListingAdFeatures() {
+        return listingAdFeatures;
     }
 
-    public void setFeatures(ArrayList<Feature> features) {
-        this.features = features;
+    public void setListingAdFeatures(ArrayList<ListingAdFeature> listingAdFeatures) {
+        this.listingAdFeatures = listingAdFeatures;
     }
 
-    public Feature getFeature(int i) {
-        if (i < this.features.size()) {
-            return this.features.get(i);
+    public ListingAdFeature getFeature(int i) {
+        if (i < this.listingAdFeatures.size()) {
+            return this.listingAdFeatures.get(i);
         }
 
-        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to get feature outside of Feature array");
+        Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to get feature outside of ListingAdFeature array");
         return null;
     }
 
-    public void addFeature(Feature feature) {
-        this.features.add(feature);
+    public void addFeature(ListingAdFeature listingAdFeature) {
+        this.listingAdFeatures.add(listingAdFeature);
     }
 
-    public void removeFeature(Feature feature) {
-        if (this.features.contains(feature)) {
-            this.features.remove(feature);
+    public void removeFeature(ListingAdFeature listingAdFeature) {
+        if (this.listingAdFeatures.contains(listingAdFeature)) {
+            this.listingAdFeatures.remove(listingAdFeature);
         } else {
-            Log.d(Constants.UNIT_CLASS_LOG_TAG, "Feature not associated with Unit");
+            Log.d(Constants.UNIT_CLASS_LOG_TAG, "ListingAdFeature not associated with Unit");
         }
     }
 
@@ -241,44 +310,44 @@ public class Unit {
         this.averageReviewScore = average / numOfRatings;
     }
 
-    public ArrayList<Room> getRooms() {
-        return rooms;
+    public ArrayList<ListingAdRoom> getListingAdRooms() {
+        return listingAdRooms;
     }
 
-    public void setRooms(ArrayList<Room> rooms) {
-        this.rooms = rooms;
+    public void setListingAdRooms(ArrayList<ListingAdRoom> listingAdRooms) {
+        this.listingAdRooms = listingAdRooms;
     }
 
-    public void addRoom(Room room) {
-        if (room == null) {
+    public void addRoom(ListingAdRoom listingAdRoom) {
+        if (listingAdRoom == null) {
             return;
         }
-        this.rooms.add(room);
-        if (room.getRoomType().equals("bathroom")) {
+        this.listingAdRooms.add(listingAdRoom);
+        if (listingAdRoom.getRoomType().equals("bathroom")) {
             this.numOfBathrooms = this.numOfBathrooms + 1;
         }
-        if (room.getRoomType().equals("bedroom")) {
+        if (listingAdRoom.getRoomType().equals("bedroom")) {
             this.numOfBedrooms = this.numOfBedrooms + 1;
         }
     }
 
-    public void removeRoom(Room room) {
-        if (room == null || !this.rooms.contains(room)) {
+    public void removeRoom(ListingAdRoom listingAdRoom) {
+        if (listingAdRoom == null || !this.listingAdRooms.contains(listingAdRoom)) {
             return;
         }
 
-        if (room.getRoomType().equals("bedroom")) {
+        if (listingAdRoom.getRoomType().equals("bedroom")) {
             this.numOfBedrooms = this.numOfBedrooms - 1;
         }
-        if (room.getRoomType().equals("bathroom")) {
+        if (listingAdRoom.getRoomType().equals("bathroom")) {
             this.numOfBathrooms = this.numOfBathrooms - 1;
         }
-        this.rooms.remove(room);
+        this.listingAdRooms.remove(listingAdRoom);
     }
 
-    public Room getRoom(int i) {
-        if (i < this.rooms.size()) {
-            return this.rooms.get(i);
+    public ListingAdRoom getRoom(int i) {
+        if (i < this.listingAdRooms.size()) {
+            return this.listingAdRooms.get(i);
         }
         Log.d(Constants.UNIT_CLASS_LOG_TAG, "Error: attempting to remove room outside of array index");
         return null;
@@ -501,4 +570,5 @@ public class Unit {
     public void setStayIncrement(String stayIncrement) {
         this.stayIncrement = stayIncrement;
     }
+    */
 }
