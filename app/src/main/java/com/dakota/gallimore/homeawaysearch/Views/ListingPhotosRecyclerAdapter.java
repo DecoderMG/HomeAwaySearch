@@ -41,7 +41,16 @@ public class ListingPhotosRecyclerAdapter extends RecyclerView.Adapter<ListingPh
     @Override
     public void onBindViewHolder(final ListingPhotosViewHolder holder, int position) {
         if (accessToken != "") {
-            GlideUrl glideUrl = new GlideUrl(dataList.get(position).getMedium().getUrl(), new LazyHeaders.Builder()
+            String imageUrl = "";
+            ListingAdPhoto photoData = dataList.get(position);
+            if(photoData.getLarge().getUrl() != null) {
+                imageUrl = photoData.getLarge().getUrl();
+            } else if (photoData.getMedium().getUrl() != null ) {
+                imageUrl = photoData.getMedium().getUrl();
+            } else if(photoData.getSmall().getUrl() != null){
+                imageUrl = photoData.getSmall().getUrl();
+            }
+            GlideUrl glideUrl = new GlideUrl(imageUrl, new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken)
                     .build());
             GlideApp.with(mContext).load(glideUrl).into(holder.image);
