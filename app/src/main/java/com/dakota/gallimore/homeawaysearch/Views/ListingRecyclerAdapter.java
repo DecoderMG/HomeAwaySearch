@@ -58,9 +58,9 @@ public class ListingRecyclerAdapter extends RecyclerView.Adapter<ListingRecycler
             holder.rate.setText(searchListing.getPriceQuote().getAverageNightly() + " " + searchListing.getPriceQuote().getCurrencyUnits());
         }
 
-        // Make sure we have the access token and use ti to access restricted HomeAway data.
+        // Make sure we have the access token and use it to access restricted HomeAway data.
         if (accessToken != "") {
-            GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnail().getUri(), new LazyHeaders.Builder()
+            GlideUrl glideUrl = new GlideUrl(searchListing.getThumbnail().getSecureUri(), new LazyHeaders.Builder()
                     .addHeader("Authorization", "Bearer " + accessToken).build());
 
             GlideApp.with(mContext).load(glideUrl).into(holder.listingImage);
