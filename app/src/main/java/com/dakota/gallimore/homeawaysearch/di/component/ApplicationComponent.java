@@ -3,6 +3,7 @@ package com.dakota.gallimore.homeawaysearch.di.component;
 import com.dakota.gallimore.homeawaysearch.ListingActivity;
 import com.dakota.gallimore.homeawaysearch.LoginActivity;
 import com.dakota.gallimore.homeawaysearch.MainActivity;
+import com.dakota.gallimore.homeawaysearch.Utils.OkHttpLibraryGlideModule;
 import com.dakota.gallimore.homeawaysearch.Views.SearchFragment;
 import com.dakota.gallimore.homeawaysearch.di.module.ApplicationModule;
 import com.dakota.gallimore.homeawaysearch.di.module.NetworkModule;
@@ -24,4 +25,5 @@ public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
     void inject(ListingActivity listingActivity);
     void inject(SearchFragment searchFragment);
+    void inject(OkHttpLibraryGlideModule okHttpLibraryGlideModule);
 }
