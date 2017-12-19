@@ -30,6 +30,7 @@ import com.dakota.gallimore.homeawaysearch.Utils.GlideApp;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkCallback;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkUtils;
 import com.dakota.gallimore.homeawaysearch.Views.ListingPhotosRecyclerAdapter;
+import com.dakota.gallimore.homeawaysearch.di.HomeAwaySearchApplication;
 import com.google.gson.Gson;
 
 import net.openid.appauth.AuthState;
@@ -44,6 +45,10 @@ import net.openid.appauth.TokenResponse;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import javax.inject.Inject;
+
+import okhttp3.OkHttpClient;
 
 public class ListingActivity extends AppCompatActivity {
 
@@ -62,6 +67,9 @@ public class ListingActivity extends AppCompatActivity {
     Listing listing;
     String listingUrl;
 
+    @Inject
+    OkHttpClient client;
+
     Context mContext;
 
     //TODO: Finish Hooking up UI elements to JSON information.
@@ -71,6 +79,7 @@ public class ListingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
+        HomeAwaySearchApplication.get(this).getAppComponent().inject(this);
         mContext = this;
 
         headline = findViewById(R.id.listing_headline_textview);
@@ -166,7 +175,10 @@ public class ListingActivity extends AppCompatActivity {
                                     return;
                                 }
                                 if (checkListingUrl(listingUrl)) {
-                                    NetworkUtils.getHomeAwayJsonData(listingUrl, authState.getAccessToken(), new NetworkCallback() {
+                                    NetworkUtils.getHomeAwayJsonData(listingUrl,
+                                            authState.getAccessToken(),
+                                            client,
+                                            new NetworkCallback() {
                                         @Override
                                         public void onJsonObjectReturn(String jsonObject) {
                                             displayJsonListingWithGson(jsonObject);
@@ -193,7 +205,10 @@ public class ListingActivity extends AppCompatActivity {
                 urlBuilder.append("&q=LOCATION");
                 urlBuilder.append("&q=PHOTOS");
                 Log.d("Listing Activity: ", urlBuilder.toString());
-                NetworkUtils.getHomeAwayJsonData(urlBuilder.toString(), authState.getAccessToken(), new NetworkCallback() {
+                NetworkUtils.getHomeAwayJsonData(urlBuilder.toString(),
+                        authState.getAccessToken(),
+                        client,
+                        new NetworkCallback() {
                     @Override
                     public void onJsonObjectReturn(String jsonObject) {
                         displayJsonListingWithGson(jsonObject);

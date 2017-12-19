@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import com.dakota.gallimore.homeawaysearch.Utils.AdapterClickListener;
 import com.dakota.gallimore.homeawaysearch.Utils.AuthUtils;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkCallback;
 import com.dakota.gallimore.homeawaysearch.Utils.NetworkUtils;
+import com.dakota.gallimore.homeawaysearch.di.HomeAwaySearchApplication;
 import com.google.gson.Gson;
 
 import net.openid.appauth.AuthState;
@@ -33,7 +35,9 @@ import net.openid.appauth.ClientSecretBasic;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
-import org.json.JSONObject;
+import javax.inject.Inject;
+
+import okhttp3.OkHttpClient;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,10 +49,14 @@ import org.json.JSONObject;
  */
 public class SearchFragment extends Fragment implements AdapterClickListener {
 
+    @Inject
+    Gson mGson;
+
+    @Inject
+    OkHttpClient client;
 
     AuthState authState;
     AuthorizationServiceConfiguration serviceConfig;
-    JSONObject jsonReply;
     RecyclerView mRecyclerView;
     ListingSearchPaginator searchListings;
     private OnFragmentInteractionListener mListener;
@@ -74,8 +82,11 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getActivity() != null) {
+            HomeAwaySearchApplication.get(getActivity()).getAppComponent().inject(this);
+        }
     }
 
     @Override
@@ -154,7 +165,10 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
                                     return;
                                 }
 
-                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search", authState.getAccessToken(), new NetworkCallback() {
+                                NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search",
+                                        authState.getAccessToken(),
+                                        client,
+                                        new NetworkCallback() {
                                     @Override
                                     public void onJsonObjectReturn(String jsonObject) {
                                         displayJsonListings(jsonObject);
@@ -176,7 +190,10 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
             authState = AuthUtils.readAuthState(getActivity());
             //tv.setText("Authorization Code: " + authState.getLastAuthorizationResponse().authorizationCode);
 
-            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search", authState.getAccessToken(), new NetworkCallback() {
+            NetworkUtils.getHomeAwayJsonData("https://ws.homeaway.com/public/search",
+                    authState.getAccessToken(),
+                    client,
+                    new NetworkCallback() {
                 @Override
                 public void onJsonObjectReturn(String jsonObject) {
                     displayJsonListings(jsonObject);
@@ -211,7 +228,7 @@ public class SearchFragment extends Fragment implements AdapterClickListener {
     private void displayJsonListings(String jsonObject) {
 
         Log.d(this.getClass().getSimpleName(), jsonObject);
-        searchListings = new Gson().fromJson(jsonObject, ListingSearchPaginator.class);
+        searchListings = mGson.fromJson(jsonObject, ListingSearchPaginator.class);
         if (searchListings != null) {
 
             getActivity().runOnUiThread(new Runnable() {

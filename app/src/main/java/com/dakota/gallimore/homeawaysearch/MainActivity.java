@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.dakota.gallimore.homeawaysearch.Views.SearchFragment;
+import com.dakota.gallimore.homeawaysearch.di.HomeAwaySearchApplication;
 
 public class MainActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener {
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        HomeAwaySearchApplication.get(this).getAppComponent().inject(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

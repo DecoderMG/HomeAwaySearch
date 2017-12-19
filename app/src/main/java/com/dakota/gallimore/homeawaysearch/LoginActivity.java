@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dakota.gallimore.homeawaysearch.di.HomeAwaySearchApplication;
+
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
@@ -25,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        HomeAwaySearchApplication.get(this).getAppComponent().inject(this);
 
         if (readAuthState(this).isAuthorized()) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
